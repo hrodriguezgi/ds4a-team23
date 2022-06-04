@@ -1,0 +1,8 @@
+version: '3'
+services:
+    ds4a-team23:
+        build: .
+        ports:
+            - "8888:8888"
+        volumes:
+            - ../project:/home/jovyan/work
