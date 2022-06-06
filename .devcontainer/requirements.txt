@@ -7,5 +7,5 @@ requests
 geopandas
 pandas-profiling[notebook]
 boto3
-wordcloud
+folium
 seaborn
