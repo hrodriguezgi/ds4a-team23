@@ -8,3 +8,4 @@ geopandas
 pandas-profiling[notebook]
 boto3
 folium
+seaborn
