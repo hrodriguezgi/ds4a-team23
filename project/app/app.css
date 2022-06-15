@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        @apply text-gray-200 font-bold;
+    }
+
+    p {
+        @apply text-gray-200;
+    }
+}
+
+@layer components {
+    .card {
+        @apply shadow-inner border-gray-300 px-4 py-4 bg-slate-800 rounded-md;
+    }
+}
+
+.nav-link {
+    @apply text-gray-400 font-semibold w-full px-6 py-4 hover:bg-gray-700 transition ease-in-out;
+}
+
+.nav-link.active {
+    @apply bg-gray-700;
+}

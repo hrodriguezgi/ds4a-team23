@@ -1,11 +1,13 @@
+wheel
+geopandas
 pandas
 numpy
 matplotlib
 sns
 geocoder
 requests
-geopandas
 pandas-profiling[notebook]
 boto3
 folium
 seaborn
+dash
