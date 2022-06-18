@@ -21,18 +21,20 @@ class MapQuest():
     def route(self, location1, location2):
         url_directions = f'http://www.mapquestapi.com/directions/v2/route?key={self.key}&from={location1}&to={location2}'
         directions = requests.get(url=url_directions)
-        directions_json = json.loads(directions.text)
-        directions = pd.DataFrame(directions_json)
-        return directions
+        directions = json.loads(directions.text)
+        return directions['route']
 
 
     def get_route_info(self, directions):
-        time = directions.loc['formattedTime']['route']
-        distance = directions.loc['distance']['route']
-        return time, distance
+        directions = pd.DataFrame([directions])
+        time_sec = directions['time']
+        time = directions['formattedTime']
+        distance = directions['distance']
+        return time_sec, time, distance
 
 
     def get_route_steps(self, directions):
-        steps = pd.DataFrame(pd.DataFrame(directions.loc['legs']['route']).iloc[0]['maneuvers'])
+        directions = pd.DataFrame([directions])
+        steps = pd.DataFrame(pd.DataFrame(directions['legs'].iloc[0]).iloc[0]['maneuvers'])
         steps = steps[['distance', 'streets', 'formattedTime', 'narrative']]
         return steps
