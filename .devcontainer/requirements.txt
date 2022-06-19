@@ -1,9 +1,9 @@
 wheel
 geopandas
 pandas
+plotly
 numpy
 matplotlib
-sns
 geocoder
 requests
 pandas-profiling[notebook]
