@@ -2,22 +2,18 @@
   "tabs": [
     {
       "text": "Context",
-      "href": "/context",
       "icon": "fa-house"
     },
     {
       "text": "Historical Data",
-      "href": "/history",
       "icon": "fa-clock-rotate-left"
     },
     {
       "text": "Real-Time App",
-      "href": "/app",
       "icon": "fa-map-pin"
     },
     {
       "text": "About Us",
-      "href": "/about-us",
       "icon": "fa-user"
     }
   ]

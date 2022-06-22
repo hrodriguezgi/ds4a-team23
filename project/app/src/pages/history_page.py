@@ -1,15 +1,17 @@
 import json
 
 import pandas as pd
-from dash import html, dcc
+from dash import html, dcc, register_page
 import plotly.express as px
+
+register_page(__name__, path='/history', title='history')
 
 f_content = open('languages/en/history.json')
 content = json.load(f_content)
 f_content.close()
 
 
-def get_page():
+def layout():
     df = pd.DataFrame({'lat': [4.651981275958889], 'lon': [-74.07677205983546]})
 
     fig = px.scatter_mapbox(df, lat="lat", lon="lon", zoom=10)
