@@ -11,3 +11,5 @@ boto3
 folium
 seaborn
 dash
+dash_bootstrap_components
+gunicorn
