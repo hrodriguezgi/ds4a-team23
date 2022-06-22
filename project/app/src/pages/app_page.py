@@ -1,17 +1,17 @@
 import json
 
 import pandas as pd
-from dash import html, dcc, Output, Input
+from dash import html, dcc, Output, Input, register_page, callback
 import plotly.express as px
 
-from main_dash import app
+register_page(__name__, path='/app', title='app')
 
 f_content = open('languages/en/app_page.json')
 content = json.load(f_content)
 f_content.close()
 
 
-def get_page():
+def layout():
     df = pd.DataFrame({'lat': [4.651981275958889], 'lon': [-74.07677205983546]})
 
     fig = px.scatter_mapbox(df, lat="lat", lon="lon", zoom=10)
@@ -52,6 +52,6 @@ def get_page():
     ], className='mx-auto container space-y-6 h-full')
 
 
-@app.callback(Output("output", "children"), Input("test", "value"))
+@callback(Output("output", "children"), Input("test", "value"))
 def cb_render(value):
     return value
