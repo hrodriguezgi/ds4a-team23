@@ -1,13 +1,15 @@
 import json
-from dash import html, dcc
+from dash import html, dcc, register_page
 import plotly.express as px
+
+register_page(__name__, path='/', title='context')
 
 f_content = open('languages/en/context.json')
 content = json.load(f_content)
 f_content.close()
 
 
-def get_page():
+def layout():
     colors = {
         'background': '#1E293B',
     }

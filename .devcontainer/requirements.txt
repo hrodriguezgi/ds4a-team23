@@ -10,5 +10,6 @@ pandas-profiling[notebook]
 boto3
 folium
 seaborn
-wordcloud
 dash
+dash_bootstrap_components
+gunicorn
