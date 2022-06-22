@@ -4,7 +4,7 @@ import pandas as pd
 from dash import html, dcc, Output, Input
 import plotly.express as px
 
-from dash_tests.src.main_dash import app
+from main_dash import app
 
 f_content = open('languages/en/app_page.json')
 content = json.load(f_content)

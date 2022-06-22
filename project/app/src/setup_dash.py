@@ -2,9 +2,9 @@ import json
 
 from dash import html, dcc, Output, Input
 import dash_bootstrap_components as dbc
-from dash_tests.src.main_dash import app
+from main_dash import app
 
-from dash_tests.src.views import app_page, history_page, context_page
+from views import app_page, history_page, context_page
 
 
 f_sidebar = open('languages/en/sidebar.json')

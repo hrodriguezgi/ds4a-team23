@@ -1,5 +1,5 @@
-from dash_tests.src.main_dash import app
-from dash_tests.src.setup_dash import setup_layout
+from main_dash import app
+from setup_dash import setup_layout
 
 
 if __name__ == '__main__':
