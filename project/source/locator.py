@@ -14,12 +14,16 @@ import random
 
 class Locator:
     def __init__(self) -> None:
+        # Bogota's Bounding Box 
         self.bounding_box = '4.433731,-74.214899,4.839060,-74.005499'
 
 
     def get_location(self, address):
         geocoder = Nominatim(user_agent='accident_locator')
-        location = geocoder.geocode(address)
+        try:
+            location = geocoder.geocode(address)
+        except Exception as e:
+            location = False
         return location
 
 
@@ -29,14 +33,12 @@ class Locator:
         return location
 
 
-    def make_accident_point(self, accident):
-        accident_tmp = gpd.tools.geocode(
-            accident['address'][0],
+    def make_accident_point(self, address):
+        address_point = gpd.tools.geocode(
+            address,
             Nominatim,
             user_agent='accident_locator')
-        accident['geometry'] = accident_tmp['geometry']
-        accident['address'] = accident_tmp['address']
-        return accident
+        return address_point.iloc[[0]]
 
 
     def make_agent_point(self, address):
@@ -48,8 +50,8 @@ class Locator:
         return agent_point
 
 
-    def make_buffer(self, accident):
-        return accident.to_crs(epsg=7855).buffer(accident['radius'][0]).to_crs(epsg=4326)
+    def make_buffer(self, address_point, radius):
+        return address_point.to_crs(epsg=7855).buffer(radius).to_crs(epsg=4326)
 
 
     def generate_coordinates(self):
