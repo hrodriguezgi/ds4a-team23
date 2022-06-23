@@ -130,3 +130,9 @@ dmypy.json
 .pyre/
 
 project/app/node_modules
+
+# raw datasets
+agents_Ene2022.csv
+agents_Feb2022.csv
+agents_Mar2022.csv
+agents_Abr2022.csv
