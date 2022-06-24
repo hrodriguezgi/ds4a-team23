@@ -13,3 +13,5 @@ seaborn
 dash
 dash_bootstrap_components
 gunicorn
+sqlalchemy
+pymysql
