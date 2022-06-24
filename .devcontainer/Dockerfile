@@ -1,6 +1,6 @@
 # See here for image contents: https://hub.docker.com/r/jupyter/datascience-notebook/
 
-FROM jupyter/minimal-notebook
+FROM --platform=linux/amd64 jupyter/minimal-notebook
 
 # We want to run common-debian.sh from here:
 # https://github.com/microsoft/vscode-dev-containers/tree/main/script-library#development-container-scripts

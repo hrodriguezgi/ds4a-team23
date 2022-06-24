@@ -5,6 +5,7 @@
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
+	"dockerComposeFile": "docker-compose.yml",
 	"overrideCommand": false,
 	
 	// Forward Jupyter port locally, mark required
