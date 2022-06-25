@@ -1,4 +1,5 @@
 {
+  "name": "ds4a-team-23",
   "scripts": {
     "hot": "tailwindcss -i app.css -o ./src/assets/output.css --watch",
     "build": "postcss app.css -o ./src/assets/output.css"
@@ -9,5 +10,9 @@
   "dependencies": {
     "autoprefixer": "^10.4.7",
     "postcss-cli": "^9.1.0"
+  },
+  "engines": {
+    "node": "16.x",
+    "npm": "8.x"
   }
 }
