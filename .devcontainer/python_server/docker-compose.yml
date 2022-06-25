@@ -1,0 +1,9 @@
+version: '3'
+services:
+    python-server:
+        build: .
+        container_name: ds4a-python
+        ports:
+            - "80:80"
+        volumes:
+            - ../../project/app:/var/www/html

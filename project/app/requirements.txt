@@ -1,0 +1,9 @@
+pandas
+plotly
+numpy
+requests
+dash
+dash_bootstrap_components
+gunicorn
+sqlalchemy
+pymysql
