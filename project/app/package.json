@@ -2,8 +2,7 @@
   "name": "ds4a-team-23",
   "scripts": {
     "hot": "tailwindcss -i app.css -o ./src/assets/output.css --watch",
-    "build": "postcss app.css -o ./src/assets/output.css",
-    "start": "postcss app.css -o ./src/assets/output.css"
+    "build": "postcss app.css -o ./src/assets/output.css"
   },
   "devDependencies": {
     "tailwindcss": "^3.1.2"
