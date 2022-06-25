@@ -1,1 +1,1 @@
-web: sh 'cd src' && gunicorn app:server
+web: sh -c 'cd src' && gunicorn app:server
