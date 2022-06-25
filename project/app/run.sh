@@ -1,2 +1,2 @@
-cd app
+cd src
 gunicorn app:server
