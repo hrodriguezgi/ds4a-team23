@@ -10,6 +10,8 @@ app = Dash(
     use_pages=True,
 )
 
+server = app.server
+
 content = html.Div([
     page_container
 ], className='overflow-auto w-full h-full p-10 flex flex-col gap-10', id='content')
@@ -21,4 +23,8 @@ app.layout = html.Div([
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run(
+        debug=True,
+        host='localhost',
+        port=8050,
+    )

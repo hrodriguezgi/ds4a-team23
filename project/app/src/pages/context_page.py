@@ -2,7 +2,7 @@ import json
 from dash import html, dcc, register_page
 import plotly.express as px
 
-register_page(__name__, path='/', title='context')
+register_page(__name__, path='/', title='context', order=0)
 
 f_content = open('languages/en/context.json')
 content = json.load(f_content)

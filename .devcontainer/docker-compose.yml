@@ -2,7 +2,9 @@ version: '3'
 services:
     ds4a-team23:
         build: .
+        container_name: ds4a-python
         ports:
+            - "8050:8050"
             - "8888:8888"
         links:
             - mysql
@@ -10,8 +12,9 @@ services:
             - ../project:/home/jovyan/work
 
     mysql:
+        platform: linux/amd64
         image: mysql:8.0
-        container_name: mysql-container
+        container_name: ds4a-mysql
         ports:
             - "3306:3306"
         volumes:
