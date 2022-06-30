@@ -8,9 +8,9 @@ date        author              changelog
 """
 
 import pandas as pd
-import locator as locator
-import postgresql as postgresql
-import mapquest 
+import geopandas as gpd
+
+from src_code import locator, postgresql, mapquest
 
 # Instance the class
 l = locator.Locator()
@@ -52,7 +52,7 @@ def dummy_agents(quantity=50):
 def real_agents(quantity=50):
     query = f'select * from uvw_agents limit {quantity}'
     agents = psql.read_sql(query)
-    agents = l.make_real_agents(agents)
+    agents = gpd.GeoDataFrame(agents, geometry=gpd.points_from_xy(agents.longitude, agents.latitude))
     return agents
 
 
@@ -70,16 +70,15 @@ def search_nearest_agent(accident_point, agents):
 
 def best_agent(accident_point, agents):
     agents_directions = {}
-    for idx, geometry, address, agent_idx, localidad in agents.itertuples():
+    for idx, agent_idx, localidad, latitude, longitude, geometry in agents.itertuples():
         directions = (mq.route(
-            f"'{geometry.y},{geometry.x}'",
-            f"'{accident_point.geometry[0].y},{accident_point.geometry[0].x}'"))
+            f'{geometry.y},{geometry.x}',
+            f'{accident_point.geometry[0].y},{accident_point.geometry[0].x}'))
         time_sec, time, distance = mq.get_route_info(directions)
 
         agents.loc[idx, 'time'] = time
         agents.loc[idx, 'time_sec'] = time_sec
         agents.loc[idx, 'distance'] = distance
-        print(agent_idx, time_sec, time, distance)
 
         agents_directions[agent_idx] = directions
     # Get agent with minimun time
@@ -93,7 +92,7 @@ def main(address, real_agent=False):
     accident_point = accident(address)
     print(accident_point.geometry[0].y,accident_point.geometry[0].x)
     print('*****************')
-    print(' Accident Point \n')
+    print('\tAccident Point\n')
     print(accident_point)
     print('\n\n')
     if not accident_point.empty:
@@ -105,14 +104,14 @@ def main(address, real_agent=False):
         # Get the nearest agents
         nearest_agents = search_nearest_agent(accident_point, agents)
         print('*****************')
-        print(' Possible Agents \n')
+        print('\tPossible Agents\n')
         print(nearest_agents)
         print('\n\n')
         ba = best_agent(accident_point, nearest_agents)
         print('*****************')
-        print(' Best Agent \n')
+        print('\tBest Agent \n')
         print(ba)
 
 
 if __name__ == '__main__':
-    main('Centro Comercial Titan Plaza', real_agent=True)
+    main('parque de la 93', real_agent=True)
