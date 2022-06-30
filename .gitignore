@@ -139,3 +139,6 @@ agents_Abr2022.csv
 
 # folders
 data/*
+
+# dev
+jupyter_dash.ipynb
