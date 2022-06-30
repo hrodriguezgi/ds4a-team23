@@ -4,6 +4,8 @@ import pandas as pd
 from dash import html, dcc, Output, Input, register_page, callback
 import plotly.express as px
 
+from src_code import accident as acc
+
 register_page(__name__, path='/app', title='app', order=2)
 
 f_content = open('languages/en/app_page.json')
@@ -54,4 +56,5 @@ def layout():
 
 @callback(Output("output", "children"), Input("test", "value"))
 def cb_render(value):
+    acc.main(value, real_agent=True)
     return value

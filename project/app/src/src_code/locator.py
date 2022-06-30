@@ -94,4 +94,4 @@ class Locator:
         for idx in agents.index:
             if buffer.intersects(agents.geometry[idx])[0]:
                 potential_agents = pd.concat([potential_agents, agents.iloc[[idx]]], ignore_index=True)
-        return(potential_agents)
+        return potential_agents
