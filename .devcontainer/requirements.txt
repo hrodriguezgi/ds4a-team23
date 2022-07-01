@@ -5,6 +5,8 @@ geocoder
 requests
 pandas-profiling[notebook]
 boto3
+geopy
+sklearn
 folium
 seaborn
 pandas==1.4.3
