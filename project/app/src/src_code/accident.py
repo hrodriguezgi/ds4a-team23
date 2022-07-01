@@ -68,7 +68,7 @@ def search_nearest_agent(accident_point, agents):
     return nearest_agent
 
 
-def best_agent(accident_point, agents):
+def find_best_agent(accident_point, agents):
     agents_directions = {}
     for idx, agent_idx, localidad, latitude, longitude, geometry in agents.itertuples():
         directions = (mq.route(
@@ -88,29 +88,25 @@ def best_agent(accident_point, agents):
 
 
 def main(address, real_agent=False):
-    # The address received is searched using Nominatin
+    # The address received is searched using Nominatim to get the exact location (geocoding)
     accident_point = accident(address)
-    print(accident_point.geometry[0].y,accident_point.geometry[0].x)
-    print('*****************')
-    print('\tAccident Point\n')
-    print(accident_point)
-    print('\n\n')
+
+    # Only proceed in case the address was properly normalized to an accident point
     if not accident_point.empty:
         if real_agent:
             agents = real_agents()
         else:
             agents = dummy_agents()
 
-        # Get the nearest agents
+        # Get the nearest agents to the accident point
         nearest_agents = search_nearest_agent(accident_point, agents)
-        print('*****************')
-        print('\tPossible Agents\n')
-        print(nearest_agents)
-        print('\n\n')
-        ba = best_agent(accident_point, nearest_agents)
-        print('*****************')
-        print('\tBest Agent \n')
-        print(ba)
+
+        # Find the closest and fastest agent to the accident point
+        best_agent = find_best_agent(accident_point, nearest_agents)
+
+        return accident_point, nearest_agents, best_agent
+
+    return None, None, None
 
 
 if __name__ == '__main__':
