@@ -5,15 +5,17 @@ Accident main
 
 date        author              changelog
 2022-06-10  hrodriguezgi        creation
+2022-06-30  hrodriguezgi        use of Google Maps API
 """
 
 import pandas as pd
 import geopandas as gpd
 
-from src_code import locator, postgresql, mapquest
+from src_code import locator, postgresql, mapquest, google_maps
 
 # Instance the class
 l = locator.Locator()
+gm = google_maps.GoogleMaps()
 psql = postgresql.PostgreSQL()
 mq = mapquest.MapQuest()
 
@@ -34,10 +36,9 @@ def accident(address: str):
     address -> Address where accident happened
     """
     # Validate location 
-    accident_location = l.get_location(address + ', Bogotá Colombia')
+    accident_location = gm.place(address)
     # Generate accident point
-    if accident_location:
-        accident_point = l.make_accident_point(accident_location)
+    accident_point = gm.make_point(accident_location)
     return accident_point
 
 
