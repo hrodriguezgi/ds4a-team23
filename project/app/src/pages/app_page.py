@@ -16,16 +16,20 @@ def layout():
     return html.Div([
         html.H1(content['title'], className='text-2xl font-bold'),
         html.Div([
-            html.H2(content['card_1']['title'], className='text-lg'),
-            html.P(content['card_1']['text']),
+            html.H2('Instructions', className='text-lg'),
+            html.Ol([
+                html.Li('Type the accident location in the search input (it can be exact or close enough to the '
+                        'accident point).'),
+                html.Li('Click the search button.'),
+            ], className='list-decimal list-inside pl-2'),
         ], className='card'),
         html.Div([
             html.Div([
-                html.H2(content['card_2']['title'], className='text-lg'),
+                html.H2('Map (it loads once it has valid data)', className='text-lg'),
                 html.Div(id='map'),
-            ], className='card w-1/2 flex flex-col gap-4'),
+            ], className='card w-full lg:w-1/2 flex flex-col gap-4 order-last lg:order-first'),
             html.Div([
-                html.H2(content['card_3']['title'], className='text-lg'),
+                html.H2('Accident Search', className='text-lg'),
                 html.Div([
                     dcc.Input(
                         id="search_value",
@@ -38,25 +42,25 @@ def layout():
                         id='search_btn',
                         className='rounded-md bg-indigo-400 text-white shadow-md px-3 py-2'
                     ),
-                    html.P('Results:'),
+                    html.P('Results', className='text-xl font-semibold'),
                     html.Hr(),
                     dcc.Loading(
                         type='default',
                         className='py-6',
                         children=[
                             html.Div([
-                                html.P('Accident Point:', className='font-bold'),
-                                html.P('', id='accident_point', className=''),
+                                html.P('Accident Location:', className='font-bold'),
+                                html.P('', id='accident_point', className='mb-4'),
                                 html.P('Possible Agents:', className='font-bold'),
-                                html.Div('', id='possible_agents', className=''),
+                                html.Div('', id='possible_agents', className='mb-4'),
                                 html.P('Best Agent:', className='font-bold'),
-                                html.Div('', id='best_agent', className=''),
+                                html.Div('', id='best_agent', className='mb-4'),
                             ])
                         ]
                     )
                 ], className='flex flex-col gap-4 w-full'),
-            ], className='card w-1/2 flex flex-col gap-4'),
-        ], className='flex justify-between gap-10')
+            ], className='card w-full lg:w-1/2 flex flex-col gap-4'),
+        ], className='flex flex-col lg:flex-row justify-between gap-10')
     ], className='mx-auto container space-y-6 h-full')
 
 
@@ -81,11 +85,11 @@ def cb_render(n_clicks, value):
         agents = [html.P(f'{agent.id} -> {agent.latitude}, {agent.longitude}')
                   for index, agent in nearest_agents.iterrows()]
 
-        agent_to_call = html.P(f'{best_agent.id[0]} -> {best_agent.latitude[0]}, {best_agent.longitude[0]}')
+        agent_to_call = html.P(f'The agent {best_agent.id[0]} located at'
+                               f' ({best_agent.latitude[0]}, {best_agent.longitude[0]})'
+                               f' will take {best_agent.time[0]} in get to the accident.')
 
-        # TODO[1]: display best agent time
         # TODO[2]: make the page responsive
-        # TODO[3]: add instructions
         # TODO[4]: message when the map is not there
         # TODO[5]: add another page for the agents prioritization
 

@@ -8,16 +8,22 @@ app = Dash(
     title='DS4A App',
     external_stylesheets=[dbc.icons.FONT_AWESOME],
     use_pages=True,
+    meta_tags=[{
+        'name': 'viewport',
+        'content': 'width=device-width, initial-scale=1',
+    }],
 )
 
 server = app.server
 
 content = html.Div([
     page_container
-], className='overflow-auto w-full h-full p-10 flex flex-col gap-10', id='content')
+], className='overflow-auto w-full h-full px-2 py-10 lg:p-10 flex flex-col gap-10', id='content')
 
 app.layout = html.Div([
-    sidebar.create(),
+    html.Div([
+        sidebar.create(),
+    ]),
     content,
 ], className='flex flex-nowrap w-full h-screen overflow-hidden bg-slate-900')
 
