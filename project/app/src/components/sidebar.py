@@ -17,7 +17,12 @@ def create():
 
 def main_sidebar():
     return html.Div([
-        html.H2('Logo', className='w-full h-28'),
+        html.Div([
+            html.Img(
+                src='/assets/traffic-jam.png',
+                className='w-auto h-48 mx-auto'
+            ),
+        ], className='h-48 w-full flex justify-center'),
         html.Hr(),
         dbc.Nav(
             [
@@ -33,7 +38,7 @@ def main_sidebar():
             className='flex flex-col w-full mt-10'
         ),
     ],
-        className='w-1/2 lg:w-96 shadow-2xl lg:shadow h-screen z-20 bg-slate-800 fixed lg:static hidden lg:block',
+        className='w-1/2 lg:w-60 shadow-2xl lg:shadow h-screen z-20 bg-slate-800 fixed lg:static hidden lg:block',
         id='sidebar'
     )
 

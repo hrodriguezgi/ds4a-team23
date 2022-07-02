@@ -5,7 +5,7 @@ import folium
 
 from src_code import accident
 
-register_page(__name__, path='/app', title='app', order=2)
+register_page(__name__, path='/best-agent', title='Find the Best Agent', order=2)
 
 f_content = open('languages/en/app_page.json')
 content = json.load(f_content)
@@ -14,7 +14,7 @@ f_content.close()
 
 def layout():
     return html.Div([
-        html.H1(content['title'], className='text-2xl font-bold'),
+        html.H1('Find the Best Agent', className='text-2xl font-bold'),
         html.Div([
             html.H2('Instructions', className='text-lg'),
             html.Ol([
@@ -34,7 +34,7 @@ def layout():
                     dcc.Input(
                         id="search_value",
                         type='text',
-                        placeholder="Enter the location to search",
+                        placeholder="Enter the location to search (e.g. Calle 7 # 34-13 or Titan)",
                         className='px-2 py-4 border-gray-500 border-2 rounded-md bg-transparent text-gray-200'
                     ),
                     html.Button(
