@@ -1,5 +1,4 @@
 wheel
-matplotlib
 geocoder
 requests
 pandas-profiling[notebook]
@@ -7,6 +6,7 @@ boto3
 geopy
 sklearn
 seaborn
+matplotlib==3.5.2
 pandas==1.4.3
 geopandas==0.11.0
 plotly==5.9.0
