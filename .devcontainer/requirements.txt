@@ -1,5 +1,4 @@
 wheel
-geopandas
 matplotlib
 geocoder
 requests
@@ -9,6 +8,7 @@ geopy
 sklearn
 seaborn
 pandas==1.4.3
+geopandas==0.11.0
 plotly==5.9.0
 numpy==1.23.0
 requests==2.28.0
