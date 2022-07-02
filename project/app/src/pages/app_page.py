@@ -74,12 +74,14 @@ def layout():
     inputs=[Input("search_btn", 'n_clicks')],
     state=[State("search_value", 'value')],
 )
-def cb_render(n_clicks, value):
+def cb_render(n_clicks, value: str):
     # Initialize variables for the outputs
     address, agents, agent_to_call, map_graph = None, None, None, None
 
     if n_clicks is not None and n_clicks > 0 and value is not None:
-        accident_point, nearest_agents, best_agent = accident.main(value, real_agent=True)
+        processed_value = value.replace('#', 'No')
+
+        accident_point, nearest_agents, best_agent = accident.main(processed_value, real_agent=True)
 
         address = accident_point.address
         agents = [html.P(f'{agent.id} -> {agent.latitude}, {agent.longitude}')
