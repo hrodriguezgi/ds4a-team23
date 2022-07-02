@@ -5,7 +5,7 @@ from sklearn.cluster import DBSCAN
 from math import radians
 
 class Insights:
-    
+
     def __init__(self):
         self.incidents = None
         self.incidents_implicated = None
@@ -16,10 +16,10 @@ class Insights:
         self.inicializarDatasets()
         self.procesarDatasets()
         self.cargarPoligonos()
-        
+
     def cargarDatasets(self):
-        self.incidents = pd.read_csv("../0_datasets/processed/incidents.csv.gz", parse_dates=["incident_time"])
-        self.incidents_implicated = pd.read_csv("../0_datasets/processed/incidents_implicated.csv.gz")
+        self.incidents = pd.read_csv("../../../0_datasets/processed/incidents.csv.gz", parse_dates=["incident_time"])
+        self.incidents_implicated = pd.read_csv("../../../0_datasets/processed/incidents_implicated.csv.gz")
         
     def inicializarDatasets(self):
         self.siniestros = self.incidents[self.incidents["class"] == "Siniestro"]        
@@ -30,7 +30,7 @@ class Insights:
                                                                    .drop_duplicates(subset="id")\
                                                                    .sort_values("incident_time")
     def cargarPoligonos(self):
-        self.pol = gpd.read_file("../0_datasets/processed/poligonos_bog.geojson")
+        self.pol = gpd.read_file("../../../0_datasets/processed/poligonos_bog.geojson")
         
     
     def procesarDatasets(self):
