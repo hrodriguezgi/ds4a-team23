@@ -11,7 +11,7 @@
         @apply text-gray-200 font-bold;
     }
 
-    p {
+    p, li {
         @apply text-gray-200;
     }
 }
