@@ -4,7 +4,7 @@ import pandas as pd
 from dash import html, dcc, register_page
 import plotly.express as px
 
-register_page(__name__, path='/insights', title='insights', order=1)
+register_page(__name__, path='/insights', title='Insights', order=1)
 
 f_content = open('languages/en/insights.json')
 content = json.load(f_content)
