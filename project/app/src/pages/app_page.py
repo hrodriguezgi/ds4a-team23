@@ -21,13 +21,13 @@ def layout():
                 html.Li('Type the accident location in the search input (it can be exact or close enough to the '
                         'accident point).'),
                 html.Li('Click the search button.'),
-            ], className='list-decimal list-inside pl-4'),
+            ], className='list-decimal list-inside pl-2'),
         ], className='card'),
         html.Div([
             html.Div([
-                html.H2('Map (it loads only once it has valid data)', className='text-lg'),
+                html.H2('Map (it loads once it has valid data)', className='text-lg'),
                 html.Div(id='map'),
-            ], className='card w-1/2 flex flex-col gap-4'),
+            ], className='card w-full lg:w-1/2 flex flex-col gap-4 order-last lg:order-first'),
             html.Div([
                 html.H2('Accident Search', className='text-lg'),
                 html.Div([
@@ -42,7 +42,7 @@ def layout():
                         id='search_btn',
                         className='rounded-md bg-indigo-400 text-white shadow-md px-3 py-2'
                     ),
-                    html.P('Results:'),
+                    html.P('Results', className='text-xl font-semibold'),
                     html.Hr(),
                     dcc.Loading(
                         type='default',
@@ -59,8 +59,8 @@ def layout():
                         ]
                     )
                 ], className='flex flex-col gap-4 w-full'),
-            ], className='card w-1/2 flex flex-col gap-4'),
-        ], className='flex justify-between gap-10')
+            ], className='card w-full lg:w-1/2 flex flex-col gap-4'),
+        ], className='flex flex-col lg:flex-row justify-between gap-10')
     ], className='mx-auto container space-y-6 h-full')
 
 

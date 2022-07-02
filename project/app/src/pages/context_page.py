@@ -42,16 +42,12 @@ def layout():
                 html.Div(
                     dcc.Graph(figure=fig, className='border-gray-300 border-2 rounded-md'),
                 ),
-            ], className='card w-1/2 flex flex-col gap-4'),
+            ], className='card w-full lg:w-1/2 flex flex-col gap-4'),
             html.Div([
                 html.H2(content['card_3']['title'], className='text-lg'),
                 html.Div(
                     dcc.Graph(figure=fig_election, className='border-gray-300 border-2 rounded-md'),
                 ),
-                # html.Div(dash_table.DataTable(
-                #     df.to_dict('records'),
-                #     [{'name': 'date', 'id': 'date'}, {'name': 'GOOG', 'id': 'GOOG'}]
-                # ))
-            ], className='card w-1/2 flex flex-col gap-4'),
-        ], className='flex justify-between gap-10')
+            ], className='card w-full lg:w-1/2 flex flex-col gap-4'),
+        ], className='flex flex-col lg:flex-row justify-between gap-10')
     ], className='mx-auto container space-y-6')
