@@ -9,7 +9,6 @@ class Insights:
         self.incidents = None
         self.incidents_implicated = None
         self.claims = None
-        self.gdf = None
 
         self._load_datasets()
         self._init_datasets()
@@ -233,8 +232,6 @@ class Insights:
 
         return data, graphic, insight_results
 
-
-insights = Insights()
 
 """
 1. biggest_accidents_per_type()
