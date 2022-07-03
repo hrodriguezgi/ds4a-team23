@@ -5,6 +5,7 @@ google maps api
 
 date        author              changelog
 2022-06-30  hrodriguezgi        creation
+2022-07-03  hrodriguezgi        new df to return in make_point method
 """
 
 from matplotlib.cbook import report_memory
@@ -32,8 +33,8 @@ class GoogleMaps():
 
     def make_point(self, df_place):
         df_place = df_place[['formatted_address', 'geometry.location.lat', 'geometry.location.lng']]
-        df_place.rename(columns={'formatted_address':'address', 'geometry.location.lat':'latitude', 'geometry.location.lng':'longitude'}, inplace=True)
-        df_place = gpd.GeoDataFrame(df_place,
-                                    geometry=gpd.points_from_xy(df_place.longitude, df_place.latitude),
+        df_place2 = df_place.rename(columns={'formatted_address':'address', 'geometry.location.lat':'latitude', 'geometry.location.lng':'longitude'})
+        df_place2 = gpd.GeoDataFrame(df_place2,
+                                    geometry=gpd.points_from_xy(df_place2.longitude, df_place2.latitude),
                                     crs="EPSG:4326")
-        return df_place
+        return df_place2

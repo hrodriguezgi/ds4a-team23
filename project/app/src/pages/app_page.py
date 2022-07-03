@@ -81,7 +81,7 @@ def cb_render(n_clicks, value: str):
     if n_clicks is not None and n_clicks > 0 and value is not None:
         processed_value = value.replace('#', 'No')
 
-        accident_point, nearest_agents, best_agent = accident.main(processed_value, real_agent=True)
+        accident_point, nearest_agents, best_agent = accident.main(processed_value)
 
         address = accident_point.address
         agents = [html.P(f'{agent.id} -> {agent.latitude}, {agent.longitude}')
