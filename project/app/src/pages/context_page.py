@@ -1,6 +1,7 @@
 import json
 from dash import html, dcc, register_page
-import plotly.express as px
+
+from src_code.insights import Insights
 
 register_page(__name__, path='/', title='Context', order=0)
 
@@ -10,25 +11,25 @@ f_content.close()
 
 
 def layout():
+    insights = Insights()
+
+    insights_to_display = [
+        insights.deaths_per_accident(),
+        insights.injuries_per_accident(),
+        insights.accidents_per_priority(),
+        insights.biggest_accidents_per_location(),
+    ]
+
     colors = {
         'background': '#1E293B',
     }
 
-    df = px.data.stocks()
-    fig = px.line(df, x="date", y="GOOG", template='plotly_dark')
-    fig.update_layout(
-        plot_bgcolor=colors['background'],
-        paper_bgcolor=colors['background'],
-    )
-
-    df_election = px.data.election()
-    election_counts = df_election['winner'].value_counts().reset_index()
-    fig_election = px.pie(election_counts, names='index', values='winner')
-    fig_election.update_layout(
-        plot_bgcolor=colors['background'],
-        paper_bgcolor=colors['background'],
-        font_color='#ffffff'
-    )
+    for _, fig, _ in insights_to_display:
+        fig.update_layout(
+            plot_bgcolor=colors['background'],
+            paper_bgcolor=colors['background'],
+            font_color='#ffffff'
+        )
 
     return html.Div([
         html.H1(content['title'], className='text-2xl font-bold'),
@@ -38,16 +39,12 @@ def layout():
         ], className='card'),
         html.Div([
             html.Div([
-                html.H2(content['card_2']['title'], className='text-lg'),
                 html.Div(
-                    dcc.Graph(figure=fig, className='border-gray-300 border-2 rounded-md'),
+                    dcc.Graph(figure=fig, className='h-full w-full border-gray-300 border-2 rounded-md'),
+                    className=''
                 ),
-            ], className='card w-full lg:w-1/2 flex flex-col gap-4'),
-            html.Div([
-                html.H2(content['card_3']['title'], className='text-lg'),
-                html.Div(
-                    dcc.Graph(figure=fig_election, className='border-gray-300 border-2 rounded-md'),
-                ),
-            ], className='card w-full lg:w-1/2 flex flex-col gap-4'),
-        ], className='flex flex-col lg:flex-row justify-between gap-10')
+                html.P(" & ".join(insight))
+            ], className='card w-full flex flex-col gap-4')
+            for data, fig, insight in insights_to_display
+        ], className='grid grid-cols-1 lg:grid-cols-2 gap-4 h-full')
     ], className='mx-auto container space-y-6')

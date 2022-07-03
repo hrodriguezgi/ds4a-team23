@@ -1,8 +1,8 @@
 import json
 
-import pandas as pd
 from dash import html, dcc, register_page
-import plotly.express as px
+from src_code.insights import Insights
+
 
 register_page(__name__, path='/insights', title='Insights', order=1)
 
@@ -12,11 +12,26 @@ f_content.close()
 
 
 def layout():
-    df = pd.DataFrame({'lat': [4.651981275958889], 'lon': [-74.07677205983546]})
+    insights = Insights()
 
-    fig = px.scatter_mapbox(df, lat="lat", lon="lon", zoom=10)
-    fig.update_layout(mapbox_style="open-street-map")
-    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+    insights_to_display = [
+        insights.biggest_accidents_per_type(),
+        insights.accidents_per_vehicle_type(),
+        insights.accidents_per_location(),
+        insights.accidents_per_zone_and_hour(hour=0),
+        insights.accidents_per_hour(hour=0)
+    ]
+
+    colors = {
+        'background': '#1E293B',
+    }
+
+    for _, fig, _ in insights_to_display:
+        fig.update_layout(
+            plot_bgcolor=colors['background'],
+            paper_bgcolor=colors['background'],
+            font_color='#ffffff'
+        )
 
     return html.Div([
         html.H1(content['title'], className='text-2xl font-bold'),
@@ -26,11 +41,12 @@ def layout():
         ], className='card'),
         html.Div([
             html.Div([
-                html.H2(content['card_2']['title'], className='text-lg'),
                 html.Div(
-                    dcc.Graph(figure=fig, className='h-[40rem] w-full border-gray-300 border-2 rounded-md'),
+                    dcc.Graph(figure=fig, className='h-full w-full border-gray-300 border-2 rounded-md'),
                     className=''
                 ),
-            ], className='card w-full flex flex-col gap-4'),
-        ], className='h-full'),
+                html.P(" & ".join(insight))
+            ], className='card w-full flex flex-col gap-4')
+            for data, fig, insight in insights_to_display
+        ], className='h-full grid grid-cols-1 grid-cols-2 gap-4 h-full'),
     ], className='mx-auto container space-y-6 h-full')

@@ -1,7 +1,7 @@
 import pandas as pd
 import geopandas as gpd
 import plotly.express as px
-import postgresql
+from src_code import postgresql
 
 
 class Insights:
@@ -16,6 +16,10 @@ class Insights:
         self._load_polygons()
 
     def _load_datasets(self):
+        # Do not delete, useful for local tests
+        # self.incidents = pd.read_csv("assets/incidents.csv.gz", parse_dates=["incident_time"])
+        # self.incidents_implicated = pd.read_csv("assets/incidents_implicated.csv.gz")
+
         psql = postgresql.PostgreSQL()
 
         self.incidents = psql.read_sql("select * from incidents_processed")
@@ -35,7 +39,7 @@ class Insights:
             .sort_values("incident_time")
 
     def _load_polygons(self):
-        self.pol = gpd.read_file("../assets/poligonos_bog.geojson")
+        self.pol = gpd.read_file("assets/poligonos_bog.geojson")
 
     def _process_datasets(self):
         self.claims["incident_day"] = self.claims.loc[:, "incident_time"].dt.to_period("d").dt.to_timestamp()
@@ -59,9 +63,9 @@ class Insights:
         2. The amount of accidents per location
         """
         data = self.claims["location"].value_counts().reset_index().rename(
-            columns={"index": "locality", "location": "num_claims"}).drop(19)
+            columns={"index": "localidad", "location": "num_claims"}).drop(19)
         pol_copy = self.pol
-        data_chlo = pol_copy.merge(data, how="left", on="locality").set_index("locality")
+        data_chlo = pol_copy.merge(data, how="left", on="localidad").set_index("localidad")
 
         graphic = px.choropleth_mapbox(data_chlo,
                                        geojson=data_chlo.geometry,
@@ -71,7 +75,7 @@ class Insights:
                                        mapbox_style="open-street-map",
                                        color_continuous_scale=["green", "red"],
                                        zoom=10,
-                                       height=800
+                                       title="Accidents per locality"
                                        )
 
         insight_results = [
@@ -131,18 +135,18 @@ class Insights:
         6. Amount of accidents per location    
         """
         data = self.claims[["type", "location"]].value_counts().reset_index().rename(
-            columns={"index": "locality", "location": "locality", "0": "total"})
-        data = data[data["locality"] != "LOCATION MISSING"]
+            columns={"index": "localidad", "location": "localidad", "0": "total"})
+        data = data[data["localidad"] != "LOCATION MISSING"]
         data["total_accidentes"] = data[0]
         del data[0]
 
-        data_final = pd.DataFrame(columns=["locality"])
+        data_final = pd.DataFrame(columns=["localidad"])
         data.sort_values(by=['total_accidentes'], ascending=False, inplace=True)
-        for location in data["locality"].value_counts().index:
-            data_final = pd.concat([data_final, data[data["locality"] == location].iloc[[0]]])
+        for location in data["localidad"].value_counts().index:
+            data_final = pd.concat([data_final, data[data["localidad"] == location].iloc[[0]]])
 
         pol_copy = self.pol
-        data_chlo = pol_copy.merge(data_final, how="left", on="locality").set_index("locality")
+        data_chlo = pol_copy.merge(data_final, how="left", on="localidad").set_index("localidad")
 
         graphic = px.choropleth_mapbox(data_chlo,
                                        geojson=data_chlo.geometry,
@@ -153,7 +157,7 @@ class Insights:
                                        hover_data=["type"],
                                        color_continuous_scale=["green", "red"],
                                        zoom=10,
-                                       height=800
+                                       title="Accidents per locality"
                                        )
         insight_results = [
             "The location with more accidents is " + str(data_final.iloc[0][0]) + " with a total amount of " + str(
@@ -169,15 +173,15 @@ class Insights:
         7. Amount of accidents per zone and hour       
         """
         data = self.claims[["location", "hour"]].value_counts().reset_index().rename(
-            columns={"index": "locality", "location": "locality", "0": "total"})
-        data = data[data["locality"] != "LOCATION MISSING"]
+            columns={"index": "localidad", "location": "localidad", "0": "total"})
+        data = data[data["localidad"] != "LOCATION MISSING"]
         data["total_accidentes"] = data[0]
         data = data[data["hour"] == hour]
         data.reset_index(inplace=True)
         del data[0], data["hour"], data["index"]
 
         pol_copy = self.pol
-        data_chlo = pol_copy.merge(data, how="left", on="locality").set_index("locality")
+        data_chlo = pol_copy.merge(data, how="left", on="localidad").set_index("localidad")
 
         graphic = px.choropleth_mapbox(data_chlo,
                                        geojson=data_chlo.geometry,
@@ -187,13 +191,16 @@ class Insights:
                                        mapbox_style="open-street-map",
                                        color_continuous_scale=["green", "red"],
                                        zoom=10,
-                                       height=800
+                                       title="Accidents per zone and hour"
                                        )
+
+        hour_in_text = ("0" + str(hour) if hour < 10 else str(hour)) + ":00"
+
         insight_results = [
-            "The location with more accidents at * is " + str(data.iloc[0][0]) + " with a total amount of " + str(
-                data.iloc[0][1]) + " cases",
-            "The location with less accidents at * is " + str(data.iloc[-1][0]) + " with a total amount of " + str(
-                data.iloc[-1][1]) + " cases"]
+            f"The location with more accidents at {hour_in_text} is " + str(data.iloc[0][0])
+            + " with a total amount of " + str(data.iloc[0][1]) + " cases",
+            f"The location with less accidents at {hour_in_text} is " + str(data.iloc[-1][0])
+            + " with a total amount of " + str(data.iloc[-1][1]) + " cases"]
         return data, graphic, insight_results
 
     def accidents_per_priority(self):
@@ -244,3 +251,10 @@ class Insights:
 8. accidents_per_priority()
 9. accidents_per_hour(hour);  (int)hour:0,1,2,...,23
 """
+
+if __name__ == '__main__':
+    insights = Insights()
+
+    _, fig, _ = insights.biggest_accidents_per_type()
+    fig.show()
+
