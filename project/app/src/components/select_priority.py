@@ -8,10 +8,10 @@ def create(id_property=None):
                 'label': 'Crash', 'value': '1',
             },
             {
-                'label': 'Injured', 'value': '2',
+                'label': 'Death', 'value': '2',
             },
             {
-                'label': 'Death', 'value': '3',
+                'label': 'Injured', 'value': '3',
             }
         ],
         id=id_property if id_property is not None else '',
