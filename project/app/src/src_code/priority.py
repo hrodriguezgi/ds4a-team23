@@ -175,7 +175,7 @@ def main(address1, priority1, address2, priority2):
         return (accident_point1, nearest_agents1, best_agent1, priority1), \
                (accident_point2, nearest_agents2, best_agent2, priority2)
 
-    return None, None, None, None, None, None, None, None
+    return (None, None, None, None), (None, None, None, None)
 
 
 if __name__ == '__main__':
