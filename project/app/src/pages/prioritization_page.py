@@ -9,7 +9,7 @@ register_page(__name__, path='/prioritize', title='Prioritize Claims', order=3)
 
 def layout():
     return html.Div([
-        html.H1('Find the Best Agent', className='text-2xl font-bold'),
+        html.H1('Prioritize agents', className='text-2xl font-bold'),
         html.Div([
             html.H2('Instructions', className='text-lg'),
             html.Ol([
@@ -73,9 +73,14 @@ def layout():
         'map': Output('map_prioritization', 'children'),
     },
     inputs=[Input("search_btn", 'n_clicks')],
-    state=[State("search_value_1", 'value'), State("search_value_2", 'value')],
+    state=[
+        State("search_value_1", 'value'),
+        State("search_value_2", 'value'),
+        State("priority_1", 'value'),
+        State("priority_2", 'value'),
+    ],
 )
-def cb_render(n_clicks, value_1: str, value_2: str):
+def cb_render(n_clicks, value_1: str, value_2: str, select_1: str, select_2: str):
     # Initialize variables for the outputs
     results_1, results_2, map_graph = None, None, None
 
@@ -86,8 +91,8 @@ def cb_render(n_clicks, value_1: str, value_2: str):
         accident_1, accident_2 = priority.main(
             address1=processed_value_1,
             address2=processed_value_2,
-            priority1=1,
-            priority2=2,
+            priority1=select_1,
+            priority2=select_2,
         )
 
         accident_point1, nearest_agents1, best_agent_1, priority1 = accident_1

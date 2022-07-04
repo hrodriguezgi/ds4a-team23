@@ -1,14 +1,25 @@
-from dash import html
+from dash import dcc
 
 
 def create(id_property=None):
-    return html.Select(
+    return dcc.Dropdown(
         [
-            html.Option('Type', value=None, disabled=True),
-            html.Option('Crash', value='1'),
-            html.Option('Injured', value='2'),
-            html.Option('Death', value='3'),
+            {
+                'label': 'Crash', 'value': '1',
+            },
+            {
+                'label': 'Injured', 'value': '2',
+            },
+            {
+                'label': 'Death', 'value': '3',
+            }
         ],
         id=id_property if id_property is not None else '',
-        className='py-2 px-2 custom-select-border bg-gray-800',
+        className='w-full h-full',
+        style={
+            'width': '10rem'
+        },
+        placeholder='Type',
+        clearable=False,
+        searchable=False,
     )
