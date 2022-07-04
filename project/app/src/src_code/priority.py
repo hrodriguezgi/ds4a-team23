@@ -173,8 +173,8 @@ def main(address1, priority1, address2, priority2):
               f'({best_agent2.latitude[0]}, {best_agent2.longitude[0]}) '
               f'will take {best_agent2.time[0]} in get to the accident.')
 
-        return accident_point1, nearest_agents1, best_agent1, priority1,\
-            accident_point2, nearest_agents2, best_agent2, priority2
+        return (accident_point1, nearest_agents1, best_agent1, priority1), \
+               (accident_point2, nearest_agents2, best_agent2, priority2)
 
     return None, None, None, None, None, None, None, None
 
