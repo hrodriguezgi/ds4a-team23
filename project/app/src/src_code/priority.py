@@ -166,11 +166,11 @@ def main(address1, priority1, address2, priority2):
         print(f'{accident_point1.address[0]}:\n'
               f'The agent {best_agent1.id[0]} located at '
               f'({best_agent1.latitude[0]}, {best_agent1.longitude[0]}) '
-              f'will take {best_agent1.time[0]} in get to the accident.\n')
+              f'will take {best_agent1.time[0]} to get to the accident.\n')
         print(f'{accident_point2.address[0]}:\n'
               f'The agent {best_agent2.id[0]} located at '
               f'({best_agent2.latitude[0]}, {best_agent2.longitude[0]}) '
-              f'will take {best_agent2.time[0]} in get to the accident.')
+              f'will take {best_agent2.time[0]} to get to the accident.')
 
         return (accident_point1, nearest_agents1, best_agent1, priority1), \
                (accident_point2, nearest_agents2, best_agent2, priority2)
