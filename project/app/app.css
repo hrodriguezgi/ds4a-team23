@@ -43,3 +43,25 @@
 .nav-link.active {
     @apply bg-gray-700;
 }
+
+.Select-control {
+    @apply h-10 text-sm !text-gray-200
+    bg-transparent
+    focus:border-gray-400 focus:outline-none rounded-md
+    border border-gray-500 hover:border-gray-400 bg-gray-800;
+}
+
+.Select-menu-outer {
+    @apply bg-transparent
+    focus:border-gray-400 focus:outline-none rounded-md
+    border border-gray-500 hover:border-gray-400 bg-gray-800
+    text-sm !text-gray-200;
+}
+
+.Select-value span {
+    @apply text-sm !text-gray-200;
+}
+
+.Select-placeholder, .Select-value {
+    @apply bg-gray-800 !text-gray-200;
+}
