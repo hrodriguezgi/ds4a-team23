@@ -9,7 +9,7 @@ register_page(__name__, path='/prioritize', title='Prioritize Claims', order=3)
 
 def layout():
     return html.Div([
-        html.H1('Find the Best Agent', className='text-2xl font-bold'),
+        html.H1('Prioritize agents', className='text-2xl font-bold'),
         html.Div([
             html.H2('Instructions', className='text-lg'),
             html.Ol([

@@ -735,10 +735,6 @@ p,  li {
   width: 1.75rem;
 }
 
-.w-3\/4 {
-  width: 75%;
-}
-
 .cursor-pointer {
   cursor: pointer;
 }
@@ -801,11 +797,6 @@ p,  li {
   border-width: 2px;
 }
 
-.border-gray-500 {
-  --tw-border-opacity: 1;
-  border-color: rgb(107 114 128 / var(--tw-border-opacity));
-}
-
 .border-gray-300 {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity));
@@ -829,10 +820,6 @@ p,  li {
 .bg-gray-300 {
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
-}
-
-.bg-transparent {
-  background-color: transparent;
 }
 
 .bg-indigo-400 {
@@ -867,11 +854,6 @@ p,  li {
   padding-bottom: 0.5rem;
 }
 
-.py-4 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -880,6 +862,11 @@ p,  li {
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .pl-2 {
@@ -911,11 +898,6 @@ p,  li {
 
 .font-semibold {
   font-weight: 600;
-}
-
-.text-gray-200 {
-  --tw-text-opacity: 1;
-  color: rgb(229 231 235 / var(--tw-text-opacity));
 }
 
 .text-white {
