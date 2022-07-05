@@ -13,6 +13,10 @@
       "icon": "fa-map-pin"
     },
     {
+      "text": "Prioritize Claims",
+      "icon": "fa-globe"
+    },
+    {
       "text": "About Us",
       "icon": "fa-user"
     }

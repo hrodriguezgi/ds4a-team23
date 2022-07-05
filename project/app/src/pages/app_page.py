@@ -35,7 +35,7 @@ def layout():
                         id="search_value",
                         type='text',
                         placeholder="Enter the location to search (e.g. Calle 7 # 34-13 or Titan)",
-                        className='px-2 py-4 border-gray-500 border-2 rounded-md bg-transparent text-gray-200'
+                        className='custom-select-border'
                     ),
                     html.Button(
                         'Search',
@@ -81,7 +81,7 @@ def cb_render(n_clicks, value: str):
     if n_clicks is not None and n_clicks > 0 and value is not None:
         processed_value = value.replace('#', 'No')
 
-        accident_point, nearest_agents, best_agent = accident.main(processed_value, real_agent=True)
+        accident_point, nearest_agents, best_agent = accident.main(processed_value)
 
         address = accident_point.address
         agents = [html.P(f'{agent.id} -> {agent.latitude}, {agent.longitude}')
@@ -89,11 +89,7 @@ def cb_render(n_clicks, value: str):
 
         agent_to_call = html.P(f'The agent {best_agent.id[0]} located at'
                                f' ({best_agent.latitude[0]}, {best_agent.longitude[0]})'
-                               f' will take {best_agent.time[0]} in get to the accident.')
-
-        # TODO[2]: make the page responsive
-        # TODO[4]: message when the map is not there
-        # TODO[5]: add another page for the agents prioritization
+                               f' will take {best_agent.time[0]} to get to the accident.')
 
         map_graph = generate_map(
             accident_loc=accident_point,
@@ -111,7 +107,7 @@ def cb_render(n_clicks, value: str):
 
 def generate_map(accident_loc, best_agent_loc, nearest_agents_locations):
     # Create the map centered in the accident location
-    fig = folium.Map((accident_loc.geometry[0].y, accident_loc.geometry[0].x), max_zoom=15, zoom_start=14)
+    fig = folium.Map((accident_loc.geometry[0].y, accident_loc.geometry[0].x), zoom_start=14)
 
     # Add the accident market to the map
     folium.Marker(
