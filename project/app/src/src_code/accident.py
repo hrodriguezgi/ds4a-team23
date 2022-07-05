@@ -6,6 +6,7 @@ Accident main
 date        author              changelog
 2022-06-10  hrodriguezgi        creation
 2022-06-30  hrodriguezgi        use of Google Maps API
+2022-07-03  hrodriguezgi        Removed dummy agents
 """
 
 import pandas as pd
@@ -19,16 +20,6 @@ gm = google_maps.GoogleMaps()
 psql = postgresql.PostgreSQL()
 mq = mapquest.MapQuest()
 
-# Flag to identify if we has the agent info
-real_agents = False
-
-"""
-priority -> 0: false alarm 
-                1: minor crash
-                2: deads
-                3: injuries
-"""
-
 
 def accident(address: str):
     """
@@ -40,14 +31,6 @@ def accident(address: str):
     # Generate accident point
     accident_point = gm.make_point(accident_location)
     return accident_point
-
-
-def dummy_agents(quantity=50):
-    """
-    Method to create random agents in Bogota
-    """
-    agents = l.make_agents(quantity)
-    return agents
 
 
 def real_agents(quantity=50):
@@ -84,20 +67,16 @@ def find_best_agent(accident_point, agents):
         agents_directions[agent_idx] = directions
     # Get agent with minimun time
     agents = agents.iloc[[agents['time_sec'].idxmin()]]
-    #steps = mq.get_route_steps(agents_directions[agents['agent_idx'][0]])
     return agents
 
 
-def main(address, real_agent=False):
+def main(address):
     # The address received is searched using Nominatim to get the exact location (geocoding)
     accident_point = accident(address)
 
     # Only proceed in case the address was properly normalized to an accident point
     if not accident_point.empty:
-        if real_agent:
-            agents = real_agents()
-        else:
-            agents = dummy_agents()
+        agents = real_agents()
 
         # Get the nearest agents to the accident point
         nearest_agents = search_nearest_agent(accident_point, agents)
@@ -111,4 +90,4 @@ def main(address, real_agent=False):
 
 
 if __name__ == '__main__':
-    main('parque de la 93', real_agent=True)
+    main('parque de la 93')

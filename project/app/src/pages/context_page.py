@@ -35,7 +35,9 @@ def layout():
         html.H1(content['title'], className='text-2xl font-bold'),
         html.Div([
             html.H2(content['card_1']['title'], className='text-lg'),
-            html.P(content['card_1']['text']),
+            html.P("TracJam is a web app that helps the SDM by analyzing the data around the city's mobility and"
+                   " improves how the entity is reacting to different road accidents"
+                   " and how they can both prioritize and optimize the agents distribution around Bogota."),
         ], className='card'),
         html.Div([
             html.Div([

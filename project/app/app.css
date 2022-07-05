@@ -20,6 +20,20 @@
     .card {
         @apply shadow-inner border-gray-300 px-4 py-4 bg-slate-800 rounded-md;
     }
+
+    .custom-input, .custom-select, .custom-input-border, .custom-select-border {
+        @apply px-4 py-2 flex-1 w-auto h-10 text-sm text-gray-200
+        bg-transparent
+        focus:border-gray-400 focus:outline-none rounded-md;
+    }
+
+    .custom-input-border, .custom-select-border {
+        @apply border border-gray-500 hover:border-gray-400 bg-gray-800;
+    }
+
+    .custom-select-border > option {
+        @apply text-sm text-gray-200;
+    }
 }
 
 .nav-link {
@@ -28,4 +42,26 @@
 
 .nav-link.active {
     @apply bg-gray-700;
+}
+
+.Select-control {
+    @apply h-10 text-sm !text-gray-200
+    bg-transparent
+    focus:border-gray-400 focus:outline-none rounded-md
+    border border-gray-500 hover:border-gray-400 bg-gray-800;
+}
+
+.Select-menu-outer {
+    @apply bg-transparent
+    focus:border-gray-400 focus:outline-none rounded-md
+    border border-gray-500 hover:border-gray-400 bg-gray-800
+    text-sm !text-gray-200;
+}
+
+.Select-value span {
+    @apply text-sm !text-gray-200;
+}
+
+.Select-placeholder, .Select-value {
+    @apply bg-gray-800 !text-gray-200;
 }
