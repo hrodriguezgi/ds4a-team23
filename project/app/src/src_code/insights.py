@@ -17,14 +17,15 @@ class Insights:
 
     def _load_datasets(self):
         # Do not delete, useful for local tests
-        # self.incidents = pd.read_csv("assets/incidents.csv.gz", parse_dates=["incident_time"])
-        # self.incidents_implicated = pd.read_csv("assets/incidents_implicated.csv.gz")
+        self.incidents = pd.read_csv("assets/incidents.csv.gz", parse_dates=["incident_time"])
+        self.incidents_implicated = pd.read_csv("assets/incidents_implicated.csv.gz")
 
-        psql = postgresql.PostgreSQL()
+        # TODO: improve this, so it's faster and better than using local csv files
+        # psql = postgresql.PostgreSQL()
+        # self.incidents = psql.read_sql("select * from incidents_processed")
+        # self.incidents_implicated = psql.read_sql("select * from incidents_implicated_processed")
 
-        self.incidents = psql.read_sql("select * from incidents_processed")
         self.incidents["incident_time"] = pd.to_datetime(self.incidents["incident_time"])
-        self.incidents_implicated = psql.read_sql("select * from incidents_implicated_processed")
 
     def _init_datasets(self):
         self.claims = self.incidents[self.incidents["class"] == "Siniestro"]
