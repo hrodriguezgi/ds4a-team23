@@ -452,3 +452,4 @@ echo -e "\
     ZSH_ALREADY_INSTALLED=${ZSH_ALREADY_INSTALLED}" > "${MARKER_FILE}"
 
 echo "Done!"
+
