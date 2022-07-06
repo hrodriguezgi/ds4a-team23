@@ -7,6 +7,7 @@ date        author              changelog
 2022-06-10  hrodriguezgi        creation
 2022-06-30  hrodriguezgi        use of Google Maps API
 2022-07-03  hrodriguezgi        Removed dummy agents
+2022-07-03  hrodriguezgi        Removed agents with zero time
 """
 
 import pandas as pd
@@ -53,7 +54,6 @@ def search_nearest_agent(accident_point, agents):
 
 
 def find_best_agent(accident_point, agents):
-    agents_directions = {}
     for idx, agent_idx, localidad, latitude, longitude, geometry in agents.itertuples():
         directions = (mq.route(
             f'{geometry.y},{geometry.x}',
@@ -64,7 +64,9 @@ def find_best_agent(accident_point, agents):
         agents.loc[idx, 'time_sec'] = time_sec
         agents.loc[idx, 'distance'] = distance
 
-        agents_directions[agent_idx] = directions
+    # Exclude agents with zero time 
+    agents = agents.drop(agents[agents.time_sec < 1].index).reset_index().sort_values(by=['time_sec'])
+
     # Get agent with minimun time
     agents = agents.iloc[[agents['time_sec'].idxmin()]]
     return agents
