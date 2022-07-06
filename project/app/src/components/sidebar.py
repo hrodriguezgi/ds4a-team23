@@ -7,6 +7,7 @@ content: dict = dict()
 
 
 def create():
+    load_content_text()
     return html.Div([
         mobile_icon(),
         main_sidebar()
@@ -16,27 +17,38 @@ def create():
 def main_sidebar():
     return html.Div([
         html.Div([
-            html.Img(
-                src='/assets/traffic-jam.png',
-                className='w-auto h-48 mx-auto'
-            ),
-        ], className='h-48 w-full flex justify-center'),
-        html.Hr(),
-        dbc.Nav(
-            [
-                dbc.NavLink(
-                    [html.I(className=f'fa-solid {tab.get("icon")}'), tab.get('text')],
-                    href=page['relative_path'],
-                    active='exact',
-                    class_name='flex items-center gap-4 w-full'
-                )
-                for page, tab in zip(page_registry.values(), content.get('tabs', {}))
-            ],
-            vertical=True,
-            className='flex flex-col w-full mt-10'
-        ),
+            html.Div([
+                html.Div([
+                    html.Img(
+                        src='/assets/traffic-jam.png',
+                        className='w-auto h-48 mx-auto'
+                    ),
+                ], className='h-48 w-full flex justify-center'),
+                html.Hr(),
+                dbc.Nav(
+                    [
+                        dbc.NavLink(
+                            [html.I(className=f'fa-solid {tab.get("icon")}'), tab.get('text')],
+                            href=page['relative_path'],
+                            active='exact',
+                            class_name='flex items-center gap-4 w-full'
+                        )
+                        for page, tab in zip(page_registry.values(), content.get('tabs', {}))
+                    ],
+                    vertical=True,
+                    className='flex flex-col w-full mt-10'
+                ),
+            ]),
+            html.Div([
+                html.Button('EN', className='text-lg font-bold px-6 text-gray-400 font-semibold'
+                                            'hover:bg-gray-700 transition ease-in-out'),
+                html.Button('ES', className='text-lg font-bold px-6 text-gray-400 font-semibold'
+                                            'hover:bg-gray-700 transition ease-in-out'),
+            ], className='flex justify-center divide-x divide-gray-200 py-4')
+        ], className='h-full w-full flex flex-col justify-between')
     ],
-        className='w-1/2 lg:w-60 shadow-2xl lg:shadow h-screen z-20 bg-slate-800 fixed lg:static hidden lg:block',
+        className='w-1/2 lg:w-60 shadow-2xl'
+                  ' lg:shadow h-screen z-20 bg-slate-800 fixed lg:static hidden lg:block',
         id='sidebar'
     )
 
