@@ -3,12 +3,12 @@ import json
 
 register_page(__name__, path='/about-us', title='About us', order=4)
 
-f_content = open('languages/en/about_us.json')
-content = json.load(f_content)
-f_content.close()
+content: dict = dict()
 
 
 def layout():
+    load_content_text()
+
     main_role = content.get('main_role')
     team = [
         {
@@ -70,3 +70,10 @@ def layout():
             for member in team
         ], className='grid grid-cols-2 lg:grid-cols-3 gap-10')
     ], className='mx-auto container space-y-6')
+
+
+def load_content_text():
+    global content
+    f_content = open('languages/en/about_us.json')
+    content = json.load(f_content)
+    f_content.close()

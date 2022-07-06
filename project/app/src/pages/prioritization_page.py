@@ -7,12 +7,12 @@ import json
 
 register_page(__name__, path='/prioritize', title='Prioritize Claims', order=3)
 
-f_content = open('languages/en/prioritization_page.json')
-content = json.load(f_content)
-f_content.close()
+content: dict = dict()
 
 
 def layout():
+    load_content_text()
+
     return html.Div([
         html.H1(content.get('title'), className='text-2xl font-bold'),
         html.Div([
@@ -223,3 +223,10 @@ def generate_map(
         height='100%',
         className='h-[40rem] w-full border-gray-300 border-2 rounded-md'
     )
+
+
+def load_content_text():
+    global content
+    f_content = open('languages/en/prioritization.json')
+    content = json.load(f_content)
+    f_content.close()

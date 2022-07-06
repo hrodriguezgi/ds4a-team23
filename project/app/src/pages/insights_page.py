@@ -6,9 +6,7 @@ from src_code.insights import Insights
 
 register_page(__name__, path='/insights', title='Insights', order=1)
 
-f_content = open('languages/en/insights.json')
-content = json.load(f_content)
-f_content.close()
+content: dict = dict()
 
 insights: Insights | None = None
 
@@ -19,6 +17,8 @@ colors = {
 
 def layout():
     global insights
+
+    load_content_text()
 
     insights = Insights()
 
@@ -130,3 +130,10 @@ def update_graph_2(value):
         )
 
     return fig_to_return, " & ".join(insight)
+
+
+def load_content_text():
+    global content
+    f_content = open('languages/en/insights.json')
+    content = json.load(f_content)
+    f_content.close()

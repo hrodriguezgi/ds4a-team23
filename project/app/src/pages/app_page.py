@@ -7,12 +7,11 @@ from src_code import accident
 
 register_page(__name__, path='/best-agent', title='Find the Best Agent', order=2)
 
-f_content = open('languages/en/app_page.json')
-content = json.load(f_content)
-f_content.close()
+content: dict = dict()
 
 
 def layout():
+    load_content_text()
     return html.Div([
         html.H1(content.get('title'), className='text-2xl font-bold'),
         html.Div([
@@ -143,3 +142,10 @@ def generate_map(accident_loc, best_agent_loc, nearest_agents_locations):
         height='100%',
         className='h-[40rem] w-full border-gray-300 border-2 rounded-md'
     )
+
+
+def load_content_text():
+    global content
+    f_content = open('languages/en/app_page.json')
+    content = json.load(f_content)
+    f_content.close()

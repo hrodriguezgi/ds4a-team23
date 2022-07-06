@@ -5,12 +5,12 @@ from src_code.insights import Insights
 
 register_page(__name__, path='/', title='Context', order=0)
 
-f_content = open('languages/en/context.json')
-content = json.load(f_content)
-f_content.close()
+content: dict = dict()
 
 
 def layout():
+    load_content_text()
+
     insights = Insights()
 
     insights_to_display = [
@@ -48,3 +48,10 @@ def layout():
             for data, fig, insight in insights_to_display
         ], className='grid grid-cols-1 lg:grid-cols-2 gap-4 h-full')
     ], className='mx-auto container space-y-6')
+
+
+def load_content_text():
+    global content
+    f_content = open('languages/en/context.json')
+    content = json.load(f_content)
+    f_content.close()
