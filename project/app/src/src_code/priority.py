@@ -30,8 +30,8 @@ def accident(address: str):
     return accident_point
 
 
-def real_agents(quantity=50):
-    query = f'select * from uvw_agents limit {quantity}'
+def real_agents(quantity=100):
+    query = f'select * from uvw_agents order by 1 limit {quantity}'
     agents = psql.read_sql(query)
     agents = gpd.GeoDataFrame(agents, geometry=gpd.points_from_xy(
         agents.longitude, agents.latitude))
@@ -61,9 +61,12 @@ def find_best_agent(accident_point, agents):
         agents.loc[idx, 'time_sec'] = time_sec
         agents.loc[idx, 'distance'] = distance
 
+    # Exclude agents with zero time 
+    agents = agents.drop(agents[agents.time_sec < 1].index).reset_index().sort_values(by=['time_sec'])
+
     # Get agent with minimun time
-    agents = agents.iloc[[agents['time_sec'].idxmin()]]
-    return agents
+    best_agent = agents.iloc[[agents['time_sec'].idxmin()]]
+    return best_agent, agents
 
 
 def measure_distance(accident_point1, accident_point2):
@@ -80,8 +83,8 @@ def far_accidents(accident_point1, accident_point2, agents):
     nearest_agents1 = search_nearest_agent(accident_point1, agents)
     nearest_agents2 = search_nearest_agent(accident_point2, agents)
     # Find the closest and fastest agent to the accident point
-    best_agent1 = find_best_agent(accident_point1, nearest_agents1)
-    best_agent2 = find_best_agent(accident_point2, nearest_agents2)
+    best_agent1, nearest_agents1 = find_best_agent(accident_point1, nearest_agents1)
+    best_agent2, nearest_agents2 = find_best_agent(accident_point2, nearest_agents2)
 
     return nearest_agents1, best_agent1, nearest_agents2, best_agent2
 
@@ -89,29 +92,20 @@ def far_accidents(accident_point1, accident_point2, agents):
 def closer_accidents(accident_point1, priority1, accident_point2, priority2, agents):
     if priority1 == priority2 == 3:
         nearest_agents1 = search_nearest_agent(accident_point1, agents)
-        nearest_agents2 = search_nearest_agent(accident_point2, agents)
-        # Validate if there are agents in both DFs
-        commons = nearest_agents1.merge(
-            nearest_agents2, left_on='id', right_on='id', suffixes=['', '_ag1'])
-        if commons.empty:
-            best_agent1 = find_best_agent(accident_point1, nearest_agents1)
-            best_agent2 = find_best_agent(accident_point2, nearest_agents2)
-        else:
-            nearest_agents1 = nearest_agents1[nearest_agents1.id ==
-                                              commons['id'][0]]
-            nearest_agents2 = nearest_agents2[nearest_agents2.id ==
-                                              commons['id'][0]]
-            best_agent1 = find_best_agent(accident_point1, nearest_agents1)
-            best_agent2 = find_best_agent(accident_point2, nearest_agents2)
+        best_agent1, nearest_agents1 = find_best_agent(accident_point1, nearest_agents1)
 
-            if best_agent1.time[0] >= best_agent2.time[0]:
-                nearest_agents1 = search_nearest_agent(
-                    accident_point1, agents[agents['id'] != best_agent2['id'][0]])
-                best_agent1 = find_best_agent(accident_point1, nearest_agents1)
+        nearest_agents2 = search_nearest_agent(accident_point2, agents)
+        best_agent2, nearest_agents2 = find_best_agent(accident_point2, nearest_agents2)
+        
+        # Validate if there are agents in both DFs
+        if best_agent1.id.iloc[0] == best_agent2.id.iloc[0]:
+            # If Agent is nearest to the accident 2:
+            if best_agent1.time_sec.iloc[0] > best_agent2.time_sec.iloc[0]:
+                # If the nearest_agents1 DF has more agents take the second one
+                best_agent1 = nearest_agents1.iloc[[1]]
             else:
-                nearest_agents2 = search_nearest_agent(
-                    accident_point2, agents[agents['id'] != best_agent1['id'][0]])
-                best_agent2 = find_best_agent(accident_point2, nearest_agents2)
+                # If the nearest_agents2 DF has more agents take the second one
+                best_agent2 = nearest_agents2.iloc[[1]]
     # Highest priority for accident1
     elif priority1 == 3:
         # Get the best agent to the priority accident
@@ -163,14 +157,14 @@ def main(address1, priority1, address2, priority2):
             nearest_agents1, best_agent1, nearest_agents2, best_agent2 = closer_accidents(
                 accident_point1, priority1, accident_point2, priority2, agents)
 
-        print(f'{accident_point1.address[0]}:\n'
-              f'The agent {best_agent1.id[0]} located at '
-              f'({best_agent1.latitude[0]}, {best_agent1.longitude[0]}) '
-              f'will take {best_agent1.time[0]} to get to the accident.\n')
-        print(f'{accident_point2.address[0]}:\n'
-              f'The agent {best_agent2.id[0]} located at '
-              f'({best_agent2.latitude[0]}, {best_agent2.longitude[0]}) '
-              f'will take {best_agent2.time[0]} to get to the accident.')
+        print(f'{accident_point1.address.iloc[0]}:\n'
+              f'The agent {best_agent1.id.iloc[0]} located at '
+              f'({best_agent1.latitude.iloc[0]}, {best_agent1.longitude.iloc[0]}) '
+              f'will take {best_agent1.time.iloc[0]} to get to the accident.\n')
+        print(f'{accident_point2.address.iloc[0]}:\n'
+              f'The agent {best_agent2.id.iloc[0]} located at '
+              f'({best_agent2.latitude.iloc[0]}, {best_agent2.longitude.iloc[0]}) '
+              f'will take {best_agent2.time.iloc[0]} to get to the accident.')
 
         return (accident_point1, nearest_agents1, best_agent1, priority1), \
                (accident_point2, nearest_agents2, best_agent2, priority2)
@@ -179,4 +173,4 @@ def main(address1, priority1, address2, priority2):
 
 
 if __name__ == '__main__':
-    main('Calle 152 No 12c', 3, 'Calle 140 No 12c', 3)
+    main('unicentro', 3, 'country', 3)
