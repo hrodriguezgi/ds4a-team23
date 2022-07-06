@@ -14,46 +14,45 @@ f_content.close()
 
 def layout():
     return html.Div([
-        html.H1('Find the Best Agent', className='text-2xl font-bold'),
+        html.H1(content.get('title'), className='text-2xl font-bold'),
         html.Div([
-            html.H2('Instructions', className='text-lg'),
+            html.H2(content.get('card_1', {}).get('title'), className='text-lg'),
             html.Ol([
-                html.Li('Type the accident location in the search input (it can be exact or close enough to the '
-                        'accident point).'),
-                html.Li('Click the search button.'),
+                html.Li(content.get('card_1', {}).get('text_1')),
+                html.Li(content.get('card_1', {}).get('text_2')),
             ], className='list-decimal list-inside pl-2'),
         ], className='card'),
         html.Div([
             html.Div([
-                html.H2('Map (it loads once it has valid data)', className='text-lg'),
+                html.H2(content.get('card_2', {}).get('title'), className='text-lg'),
                 html.Div(id='map'),
             ], className='card w-full lg:w-1/2 flex flex-col gap-4 order-last lg:order-first'),
             html.Div([
-                html.H2('Accident Search', className='text-lg'),
+                html.H2(content.get('card_3', {}).get('title'), className='text-lg'),
                 html.Div([
                     dcc.Input(
                         id="search_value",
                         type='text',
-                        placeholder="Enter the location to search (e.g. Calle 7 # 34-13 or Titan)",
+                        placeholder=content.get('card_3', {}).get('placeholder'),
                         className='custom-select-border'
                     ),
                     html.Button(
-                        'Search',
+                        content.get('card_3', {}).get('search_btn'),
                         id='search_btn',
                         className='rounded-md bg-indigo-400 text-white shadow-md px-3 py-2'
                     ),
-                    html.P('Results', className='text-xl font-semibold'),
+                    html.P(content.get('card_3', {}).get('results'), className='text-xl font-semibold'),
                     html.Hr(),
                     dcc.Loading(
                         type='default',
                         className='py-6',
                         children=[
                             html.Div([
-                                html.P('Accident Location:', className='font-bold'),
+                                html.P(content.get('card_3', {}).get('accident_location'), className='font-bold'),
                                 html.P('', id='accident_point', className='mb-4'),
-                                html.P('Possible Agents:', className='font-bold'),
+                                html.P(content.get('card_3', {}).get('possible_agents'), className='font-bold'),
                                 html.Div('', id='possible_agents', className='mb-4'),
-                                html.P('Best Agent:', className='font-bold'),
+                                html.P(content.get('card_3', {}).get('best_agent'), className='font-bold'),
                                 html.Div('', id='best_agent', className='mb-4'),
                             ])
                         ]
@@ -87,9 +86,15 @@ def cb_render(n_clicks, value: str):
         agents = [html.P(f'{agent.id} -> {agent.latitude}, {agent.longitude}')
                   for index, agent in nearest_agents.iterrows()]
 
-        agent_to_call = html.P(f'The agent {best_agent.id[0]} located at'
-                               f' ({best_agent.latitude[0]}, {best_agent.longitude[0]})'
-                               f' will take {best_agent.time[0]} to get to the accident.')
+        # agent_to_call = html.P(f'The agent {best_agent.id[0]} located at'
+        #                        f' ({best_agent.latitude[0]}, {best_agent.longitude[0]})'
+        #                        f' will take {best_agent.time[0]} to get to the accident.')
+
+        agent_to_call = html.P(
+            content.get('agent_to_call').format(
+                best_agent.id[0], best_agent.latitude[0], best_agent.longitude[0], best_agent.time[0]
+            )
+        )
 
         map_graph = generate_map(
             accident_loc=accident_point,
@@ -112,7 +117,7 @@ def generate_map(accident_loc, best_agent_loc, nearest_agents_locations):
     # Add the accident market to the map
     folium.Marker(
         location=[accident_loc.geometry[0].y, accident_loc.geometry[0].x],
-        tooltip='Accident',
+        tooltip=content.get('tooltip_accident'),
         icon=folium.Icon(color='red'),
     ).add_to(fig)
 
@@ -120,13 +125,13 @@ def generate_map(accident_loc, best_agent_loc, nearest_agents_locations):
     for index, agent in nearest_agents_locations.iterrows():
         folium.Marker(
             location=[agent.latitude, agent.longitude],
-            tooltip=f'Agent -> {agent.id}',
+            tooltip=content.get('tooltip_accident').format(agent.id),
         ).add_to(fig)
 
     # Add the best agent
     folium.Marker(
         location=[best_agent_loc.latitude[0], best_agent_loc.longitude[0]],
-        tooltip=f'Best agent -> {best_agent_loc.id[0]}',
+        tooltip=content.get('tooltip_best_agent').format(best_agent_loc.id[0]),
         icon=folium.Icon(color='darkblue', icon='star'),
     ).add_to(fig)
 

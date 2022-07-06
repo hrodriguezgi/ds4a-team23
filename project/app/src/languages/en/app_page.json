@@ -1,13 +1,24 @@
 {
-  "title": "Real-Time App",
+  "title": "Find the Best Agent",
   "card_1": {
-    "title": "Introduction",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sed ligula eget sapien mattis aliquet non non ligula. Proin non posuere nibh. Mauris a turpis neque. Nulla facilisi. Proin ultricies accumsan massa vel scelerisque. Ut eu tortor ipsum. Praesent dictum maximus leo vel malesuada. Donec et ante sit amet neque ultrices condimentum. Phasellus semper sit amet enim lobortis tincidunt. Aliquam erat volutpat. Fusce sed orci at sem mollis sodales. Maecenas quis nibh in ligula malesuada feugiat."
+    "title": "Instructions",
+    "text_1": "Type the accident location in the search input (it can be exact or close enough to the accident point).",
+    "text_2": "Click the search button."
   },
   "card_2": {
     "title": "Map"
   },
   "card_3": {
-    "title": "Data"
-  }
+    "title": "Accident Search",
+    "placeholder": "Enter the location to search (e.g. Calle 7 # 34-13 or Titan)",
+    "search_btn": "Search",
+    "results": "Results",
+    "accident_location": "Accident Location:",
+    "possible_agents": "Possible Agents:",
+    "best_agent": "Best Agent:"
+  },
+  "agent_to_call": "The agent {} located at ({}, {}) will take {} to get to the accident.",
+  "tooltip_accident": "Accident",
+  "tooltip_agent": "Agent -> {}",
+  "tooltip_best_agent": "Best agent -> {}"
 }
