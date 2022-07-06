@@ -34,10 +34,10 @@ def layout():
         )
 
     return html.Div([
-        html.H1(content['title'], className='text-2xl font-bold'),
+        html.H1(content.get('title'), className='text-2xl font-bold'),
         html.Div([
-            html.H2(content['card_1']['title'], className='text-lg'),
-            html.P(content['card_1']['text']),
+            html.H2(content.get('card_1', {}).get('title'), className='text-lg'),
+            html.P(content.get('card_1', {}).get('text')),
         ], className='card'),
         html.Div([
             html.Div([

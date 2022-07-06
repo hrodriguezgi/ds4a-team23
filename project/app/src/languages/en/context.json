@@ -2,12 +2,6 @@
   "title": "Context",
   "card_1": {
     "title": "Introduction",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sed ligula eget sapien mattis aliquet non non ligula. Proin non posuere nibh. Mauris a turpis neque. Nulla facilisi. Proin ultricies accumsan massa vel scelerisque. Ut eu tortor ipsum. Praesent dictum maximus leo vel malesuada. Donec et ante sit amet neque ultrices condimentum. Phasellus semper sit amet enim lobortis tincidunt. Aliquam erat volutpat. Fusce sed orci at sem mollis sodales. Maecenas quis nibh in ligula malesuada feugiat."
-  },
-  "card_2": {
-    "title": "Accidents per month"
-  },
-  "card_3": {
-    "title": "Accidents per month"
+    "text": "TracJam is a web app that helps the SDM by analyzing the data around the city's mobility and improves how the entity is reacting to different road accidents and how they can both prioritize and optimize the agents distribution around Bogota."
   }
 }

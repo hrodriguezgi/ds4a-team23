@@ -1,0 +1,29 @@
+{
+  "title": "Prioritize agents",
+  "card_1": {
+    "title": "Instructions",
+    "text_1": "Type each accident location in each search input (they can be exact or close enough to the accident points).",
+    "text_2": "Click the search button."
+  },
+  "card_2": {
+    "title": "Map"
+  },
+  "card_3": {
+    "title": "Accident Search",
+    "placeholder_1": "First location (e.g. Calle 7 # 34-13)",
+    "placeholder_2": "First location (e.g. Calle 7 # 34-13)",
+    "search_btn": "Search",
+    "results": "Results",
+    "accident_location": "Accident Location:",
+    "possible_agents": "Possible Agents:",
+    "best_agent": "Best Agent:"
+  },
+  "agent_to_call_1": "The agent {} located at ({}, {}) will take {} to get to the accident.",
+  "agent_to_call_2": "The agent {} located at ({}, {}) will take {} to get to the accident.",
+  "tooltip_accident": "Accident",
+  "tooltip_agent": "Agent -> {}",
+  "tooltip_best_agent_first": "Best agent first accident -> {}",
+  "tooltip_best_agent_second": "Best agent second accident -> {}",
+  "first_accident": "First Accident",
+  "second_accident": "Second Accident"
+}
