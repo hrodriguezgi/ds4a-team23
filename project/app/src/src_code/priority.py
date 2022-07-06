@@ -63,7 +63,7 @@ def find_best_agent(accident_point, agents):
         agents.loc[idx, 'distance'] = distance
 
     # Exclude agents with zero time 
-    agents = agents.drop(agents[agents.time_sec < 1].index).reset_index().sort_values(by=['time_sec'])
+    agents = agents.drop(agents[agents.time_sec < 1].index).reset_index(drop=True).sort_values(by=['time_sec']).reset_index(drop=True)
 
     # Get agent with minimun time
     best_agent = agents.iloc[[agents['time_sec'].idxmin()]]
