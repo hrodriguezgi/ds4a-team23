@@ -2,7 +2,7 @@
   "title": "Insights",
   "card_1": {
     "title": "Introduction",
-    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sed ligula eget sapien mattis aliquet non non ligula. Proin non posuere nibh. Mauris a turpis neque. Nulla facilisi. Proin ultricies accumsan massa vel scelerisque. Ut eu tortor ipsum. Praesent dictum maximus leo vel malesuada. Donec et ante sit amet neque ultrices condimentum. Phasellus semper sit amet enim lobortis tincidunt. Aliquam erat volutpat. Fusce sed orci at sem mollis sodales. Maecenas quis nibh in ligula malesuada feugiat."
+    "text": "In this page you will find some insights from the historical data of incidents from January to June of 2022. The purpose of this page is to enable you to gain a deeper understanding of different aspects of the data with the aid of the interactivity that provides the plots below. We present you with some insights regarding the different categorizations of incidents(class, implicated type, etc.) and their rate of occurrence. We also present some choropleth maps that divide the city into localities and show the magnitudes of different attributes with the color grades. After that, we also present a clusterization of the incident locations by hour of the day, this enables you to identify the hotspots locations from the past months. Finally we present a linear regression model that is capable of predicting the number of incidents per locality."
   },
   "card_2": {
     "title": "Map"
