@@ -48,5 +48,5 @@ def layout():
                 html.P(" & ".join(insight))
             ], className='card w-full flex flex-col gap-4')
             for data, fig, insight in insights_to_display
-        ], className='h-full grid grid-cols-1 grid-cols-2 gap-4 h-full'),
+        ], className='h-full grid grid-cols-1 lg:grid-cols-2 gap-4 h-full'),
     ], className='mx-auto container space-y-6 h-full')
