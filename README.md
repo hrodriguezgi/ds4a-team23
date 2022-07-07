@@ -32,8 +32,6 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <!-- <li><a href="#contributing">Contributing</a></li> -->
-    <!-- <li><a href="#license">License</a></li> -->
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
@@ -48,13 +46,24 @@
 
 TracJam is a web application to coordinate the response and prioritize the agent's shifts to different traffic accidents in the city of Bogota in Colombia. Our solution consist of two main parts. 
 
-**Part 1: Find Best Agent - Accident search**
-The prioritization is based on a simple but effective algorithm that uses the realtime agent location that is provided by SDM, Mapquest API and Google maps API. The process starts with an accident report that contains the accident location that could be an address, coordinates, or a place. This will be typed, so we use the Google maps API to convert whatever the user types on a very close location with exact coordinates. When the accident is reported the algorithm starts to search for all the agents that are in a 1Km range of the accident, if the search is empty the algorithm will start increasing the range. When the agents are found it will start to use the mapquest API to calculate the time for each agent to get to the accident location. The algorithm will select the agent with the lower time and will show it on the map along with the route that the agent needs to follow and the location of the other agents.
 
-**Part 2: Insights**
+### Insights
 
 This part of the solution is based on all the EDA made on the datasets and the main goal is to make multiple functions and calculations to show on the app as crucial facts to help make decisions across the city mobility. The first insight that we wanted to show was, how the incident locations cluster in Bogotá depending on the hour of the day. To do this we first needed to clean the data as there were a few incidents with clearly incorrect date attributes. Another important thing to do is to choose the right type of visualization so that the insights are easy to understand and provide a useful tool in the decision making process. Other insights we have gathered are the most common types of vehicles implicated in the incidents, we selected a barplot as these represent categorical data. These insights enable us to understand the history of incidents per locality, nonetheless it would be even better if we could predict the number of incidents per locality in the future. For this purpose we have proposed a predictive model using linear regression.
 
+![Clusters](images/clusters.png)
+
+### Find Best Agent
+
+The prioritization is based on a simple but effective algorithm that uses the realtime agent location that is provided by SDM, Mapquest API and Google maps API. The process starts with an accident report that contains the accident location that could be an address, coordinates, or a place. This will be typed, so we use the Google maps API to convert whatever the user types on a very close location with exact coordinates. When the accident is reported the algorithm starts to search for all the agents that are in a 1Km range of the accident, if the search is empty the algorithm will start increasing the range. When the agents are found it will start to use the mapquest API to calculate the time for each agent to get to the accident location. The algorithm will select the agent with the lower time and will show it on the map along with the route that the agent needs to follow and the location of the other agents.
+
+![BestAgent](images/best_agent.png)
+
+### Prioritize Claims
+
+Based on the previous algorithm, in this case there are two different accidents with their different categories. The process will initially determine if the locations of both accidents are distant (greater than 1.5km) or close. In the first case, the agents will be assigned independently, and in the second case, the possible agents of each accident must be evaluated and the times of the best agent for each one must be determined. If the best agent is different for each accident, it will remain so, if it is the same, which accident attends in the shortest time will be evaluated, and the next one with the shortest time on the list will be assigned to the other accident.
+
+![Priority](images/priority.png)
 
 
 
@@ -113,23 +122,13 @@ This section will receive two accidents and depending on the category of the acc
 ![Priority](images/priority.png)
 
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+- [ ] Enable automatic loads for datasets provided by the SDM, or enable the direct connect against the SDM databases.
+- [ ] Get real time position of the agents to improve the time attentions.
+- [ ] Enable speech to text to report an accident when a citizen calls to 123 emergency line.
+- [ ] Transform the app into API, this way any entity could use the insights and the algorithm to deploy emergency teams.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -139,11 +138,11 @@ See the [open issues](https://github.com/github_username/repo_name/issues) for a
 * David Felipe Mora - [@github](https://github.com/DavidFM43) - [@linkedin](https://www.linkedin.com/in/david-felipe-mora/)
 * Felix David Gomez Marin - [@github](https://github.com/FelixDavid12) - [@linkedin](https://www.linkedin.com/in/felix-david-gomez-marin/)
 * Harvey Rodriguez Gil - [@github](https://github.com/hrodriguezgi) - [@linkedin](https://www.linkedin.com/in/hrodriguezgi/)
-* Maria Fernanda Alvarez - [@github]() - [@linkedin]()
+* Maria Fernanda Alvarez - [@github](https://github.com/mafelml) - [@linkedin](https://www.linkedin.com/in/mar%C3%ADa-fernanda-%C3%A1lvarez-fl%C3%B3rez-9aa35620b/)
 * Sebastian Chavarriaga - [@github](https://github.com/schavar) - [@linkedin](https://www.linkedin.com/in/sebastian-c-0a0071219/)
 * Victor Manuel Villamil Perez - [@github](https://github.com/vmvillamilp) - [@linkedin](https://www.linkedin.com/in/victorvillamil95/)
 
-Project Link: [https://www.tracjam.com.co/ ](https://www.tracjam.com.co/ )
+Project Link: [https://www.tracjam.com.co/](https://www.tracjam.com.co/ )
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
