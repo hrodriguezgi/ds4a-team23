@@ -151,10 +151,13 @@ class Insights:
         data = self.claims["implicated_type"].value_counts()
         x, y = [self._apply_translation(x) for x in data.index], [val for val in data]
         data = pd.Series(y, index=x)
+
         insight_results = [
-            "The type of vehicle with the most amount of accidents is " + str(data.index[0]) + ", followed by " + str(
-                data.index[1]) + " and " + str(data.index[2]) + ", with a total amount of " + str(
-                data.values[0]) + ", " + str(data.values[1]) + " and " + str(data.values[2]) + " cases respectively."]
+            "The type of vehicle with the most amount of accidents is " + str(data.index[0]) +
+            ", followed by " + str(data.index[1]) + " and " + str(data.index[2]) +
+            ", with a total amount of " + str(data.values[0]) + ", " + str(data.values[1]) +
+            " and " + str(data.values[2]) + " cases respectively."]
+
         graphic = px.bar(data, x=data.index, y=data, labels={'index': 'Type of vehicle', 'y': 'Amount'},
                          title="Accidents per vehicle type")
 
