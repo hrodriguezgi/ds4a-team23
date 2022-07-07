@@ -37,14 +37,16 @@ def layout():
         fig.update_layout(
             plot_bgcolor=colors['background'],
             paper_bgcolor=colors['background'],
-            font_color='#ffffff'
+            font_color='#ffffff',
+            margin=dict(l=70, r=70),
         )
 
     for _, fig, _ in clusters_to_display:
         fig.update_layout(
             plot_bgcolor=colors['background'],
             paper_bgcolor=colors['background'],
-            font_color='#ffffff'
+            font_color='#ffffff',
+            margin=dict(l=70, r=70, t=10, b=10),
         )
 
     html_insights = [
@@ -122,7 +124,8 @@ def update_graph_1(value):
         fig.update_layout(
             plot_bgcolor=colors['background'],
             paper_bgcolor=colors['background'],
-            font_color='#ffffff'
+            font_color='#ffffff',
+            margin=dict(l=70, r=70),
         )
 
         fig_to_return = html.Div(
@@ -147,7 +150,8 @@ def update_graph_2(value):
         fig.update_layout(
             plot_bgcolor=colors['background'],
             paper_bgcolor=colors['background'],
-            font_color='#ffffff'
+            font_color='#ffffff',
+            margin=dict(l=70, r=70),
         )
 
         fig_to_return = html.Div(

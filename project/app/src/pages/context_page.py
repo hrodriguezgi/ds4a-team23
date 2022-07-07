@@ -28,7 +28,8 @@ def layout():
         fig.update_layout(
             plot_bgcolor=colors['background'],
             paper_bgcolor=colors['background'],
-            font_color='#ffffff'
+            font_color='#ffffff',
+            margin=dict(l=70, r=70),
         )
 
     return html.Div([
