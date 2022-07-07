@@ -1,4 +1,3 @@
-from re import A
 import pandas as pd
 import geopandas as gpd
 import plotly.express as px
@@ -7,36 +6,35 @@ from math import radians
 from sklearn.cluster import DBSCAN 
 import statsmodels.formula.api as sm
 
-from src_code import postgresql
-#import postgresql
 
 class Insights:
 
-    def __init__(self,language):
+    def __init__(self, language='EN'):
+        self.language = None
         self.incidents = None
         self.incidents_implicated = None
         self.claims = None
+        self.tmp_claims = None
         self.translation_dictionary = dict()
 
         self._load_datasets()
         self._init_datasets()
         self._process_datasets()
         self._load_polygons()
-        self._compute_clusters()
         self.change_language(language)
 
-    def change_language(self,language):
+    def change_language(self, language):
         self.language = language
         self._load_translation_dictionary()
 
     def _load_translation_dictionary(self):
         if self.language == "EN":
             self.translation_dictionary["EN"] = {}
-            with open('en_data.txt') as f:
+            with open('assets/en_data.txt') as f:
                 for word in [line.rstrip().split("=") for line in f]:
-                    self.translation_dictionary["EN"][word[0]]=word[1]            
+                    self.translation_dictionary["EN"][word[0]] = word[1]
 
-    def _apply_translation(self,word):
+    def _apply_translation(self, word):
         if self.language != "ES":
             return self.translation_dictionary["EN"][word] if word in self.translation_dictionary["EN"] else "--"
         else:
@@ -44,13 +42,8 @@ class Insights:
 
     def _load_datasets(self):
         # Do not delete, useful for local tests
-        #self.incidents = pd.read_csv("../assets/incidents.csv.gz", parse_dates=["incident_time"])
-        #self.incidents_implicated = pd.read_csv("../assets/incidents_implicated.csv.gz")
-
-        # TODO: improve this, so it's faster and better than using local csv files
-        psql = postgresql.PostgreSQL()
-        self.incidents = psql.read_sql("select * from incidents_processed")
-        self.incidents_implicated = psql.read_sql("select * from incidents_implicated_processed")
+        self.incidents = pd.read_csv("assets/incidents.csv.gz", parse_dates=["incident_time"])
+        self.incidents_implicated = pd.read_csv("assets/incidents_implicated.csv.gz")
 
         self.incidents["incident_time"] = pd.to_datetime(self.incidents["incident_time"])
 
@@ -80,8 +73,8 @@ class Insights:
         """
         data = self.claims["type"].value_counts()
 
-        x,y = [self._apply_translation(x) for x in data.index],[val for val in data]
-        data = pd.Series(y,index=x)
+        x, y = [self._apply_translation(x) for x in data.index],[val for val in data]
+        data = pd.Series(y, index=x)
         
         insight_results = [
             "The incident type with the most amount of cases is " + str(data.index[0]) + " with a total of " + str(
@@ -156,8 +149,8 @@ class Insights:
         5. Amount of accidents per vehicle type
         """
         data = self.claims["implicated_type"].value_counts()
-        x,y = [self._apply_translation(x) for x in data.index],[val for val in data]
-        data = pd.Series(y,index=x)
+        x, y = [self._apply_translation(x) for x in data.index], [val for val in data]
+        data = pd.Series(y, index=x)
         insight_results = [
             "The type of vehicle with the most amount of accidents is " + str(data.index[0]) + ", followed by " + str(
                 data.index[1]) + " and " + str(data.index[2]) + ", with a total amount of " + str(
@@ -295,19 +288,30 @@ class Insights:
     def sinisters_per_day(self):
         data = self.claims["incident_day"].value_counts().sort_index(ascending=False).reset_index().rename(columns={"index": "Fecha", "incident_day":"Numero de siniestros"})        
         fig = px.line(data, x="Fecha", y="Numero de siniestros")
-        return data,fig,[]
+        return data, fig, []
 
-    #Code section used for implement the map's clusters
-    def cluster_points_dbscan(self,data):
-        eps=50
-        min_samples=3
-        """Recibe la disntancia 'eps' en metros bajo la cual se considera que un dato vecino de otro, 
+    def cluster_points_dbscan(self, data):
+        """
+        Code section used for implement the map's clusters
+
+        Recibe la disntancia 'eps' en metros bajo la cual se considera que un dato vecino de otro,
         y 'min_samples' que es el minimo número de muestras que forman un cluster.
-        Retorna el dataframe 'data' con dos nuevas columnas 'cluster' y 'cluster_size'. """
+        Retorna el dataframe 'data' con dos nuevas columnas 'cluster' y 'cluster_size'.
+        """
+        eps = 50
+        min_samples = 3
 
-        locs = data.loc[:, ["latitude", "longitude"]].apply(lambda x: x.map(radians), axis=1) # lat y long a radianes
-        dbc = DBSCAN(eps=eps/6371000, min_samples=min_samples, metric="haversine", n_jobs=-1).fit(locs) # fit dbscan clustering
-        data["cluster"] = dbc.labels_.astype(pd.Categorical) # cluster labels
+        locs = data.loc[:, ["latitude", "longitude"]].apply(lambda x: x.map(radians), axis=1)  # lat y long a radians
+
+        # fit dbscan clustering
+        dbc = DBSCAN(
+            eps=eps/6371000,
+            min_samples=min_samples,
+            metric="haversine",
+            n_jobs=-1
+        ).fit(locs)
+
+        data["cluster"] = dbc.labels_.astype(pd.Categorical)  # cluster labels
         cluster_sizes = data["cluster"].value_counts() 
         data["cluster_size"] = data["cluster"].map(cluster_sizes)
 
@@ -316,34 +320,46 @@ class Insights:
     def _compute_clusters(self):
         self.tmp_claims = self.claims.groupby("hour").apply(self.cluster_points_dbscan)
 
-    def draw_incidents_map(self):                
-        fig = px.scatter_mapbox(self.tmp_claims.sort_values("hour"),
-                lat='latitude',
-                lon='longitude',
-                zoom=10,
-                animation_frame="hour",
-                mapbox_style='open-street-map',
-                hover_name="incident_time",
-                hover_data=['type', 'gravity',  'class'],
-                )
+    def draw_incidents_map(self):
+        if self.tmp_claims is None:
+            self._compute_clusters()
+
+        fig = px.scatter_mapbox(
+            self.tmp_claims.sort_values("hour"),
+            lat='latitude',
+            lon='longitude',
+            zoom=10,
+            animation_frame="hour",
+            mapbox_style='open-street-map',
+            hover_name="incident_time",
+            hover_data=['type', 'gravity',  'class'],
+        )
+
         fig.update_layout(
             autosize=False,
             width=1000,
-            height=600,)
+            height=600
+        )
+
         return self.tmp_claims, fig, []
 
     def draw_incidents_clusters_map(self):
-        fig = px.scatter_mapbox((self.tmp_claims.loc[self.tmp_claims["cluster"] != -1,:]).sort_values("hour"),
-                    lat='latitude',
-                    lon='longitude',
-                    opacity=0.7,
-                    size='cluster_size',
-                    zoom=10,
-                    animation_frame="hour",
-                    mapbox_style='open-street-map',
-                    hover_name="incident_time",
-                    hover_data=['class','type', 'gravity'],
-                    )
+        if self.tmp_claims is None:
+            self._compute_clusters()
+
+        fig = px.scatter_mapbox(
+            (self.tmp_claims.loc[self.tmp_claims["cluster"] != -1, :]).sort_values("hour"),
+            lat='latitude',
+            lon='longitude',
+            opacity=0.7,
+            size='cluster_size',
+            zoom=10,
+            animation_frame="hour",
+            mapbox_style='open-street-map',
+            hover_name="incident_time",
+            hover_data=['class','type', 'gravity'],
+        )
+
         fig.update_layout(
             autosize=False,
             width=1000,
@@ -351,7 +367,7 @@ class Insights:
                       
         return self.tmp_claims, fig, []
     
-    def _train_model(self,nom_localidad):
+    def _train_model(self, nom_localidad):
         print(nom_localidad)
 
     def _create_linear_regression_model(self, localidad):
@@ -366,10 +382,8 @@ class Insights:
         print(linear_model_fit.summary())
 
 
-
-
 """
-#Insights
+Insights
 1. biggest_accidents_per_type()
 2. biggest_accidents_per_location()
 3. deaths_per_accident()
@@ -380,19 +394,14 @@ class Insights:
 8. accidents_per_priority()
 9. accidents_per_hour(hour);  (int)hour:0,1,2,...,23
 
-#Cluster maps
+Cluster maps
 10. draw_incidents_map()
 11. draw_incidents_clusters_map()
-
-#Regresión
-
 """
 
 if __name__ == '__main__':
     insights = Insights("EN")
     
     data, fig, insights = insights.draw_incidents_clusters_map()
-    #print(data)
-    #print(insights)
     fig.show()
 

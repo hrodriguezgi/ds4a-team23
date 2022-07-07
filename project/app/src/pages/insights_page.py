@@ -25,7 +25,9 @@ def layout():
     insights_to_display = [
         insights.biggest_accidents_per_type(),
         insights.accidents_per_vehicle_type(),
-        insights.accidents_per_location()
+        insights.accidents_per_location(),
+        insights.draw_incidents_map(),
+        insights.draw_incidents_clusters_map()
     ]
 
     for _, fig, _ in insights_to_display:
