@@ -143,3 +143,4 @@ data/*
 # dev
 jupyter_dash.ipynb
 .devcontainer/library-scripts/common-debian.sh
+project/app/src/.env

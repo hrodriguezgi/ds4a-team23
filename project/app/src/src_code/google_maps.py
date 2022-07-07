@@ -8,18 +8,17 @@ date        author              changelog
 2022-07-03  hrodriguezgi        new df to return in make_point method
 """
 
-from matplotlib.cbook import report_memory
-import requests 
+import requests
 import json
 
 import pandas as pd
 import geopandas as gpd
+from decouple import config
 
 
-class GoogleMaps():
+class GoogleMaps:
     def __init__(self) -> None:
-        self.key = 'AIzaSyBtZrQ210rhwTmMj8lHFgRn5meso0BR9OU'
-
+        self.key = config('GOOGLE_API_KEY')
 
     def place(self, place):
         place = place + ' Bogota Colombia'
