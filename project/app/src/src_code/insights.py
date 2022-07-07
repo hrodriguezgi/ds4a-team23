@@ -335,12 +335,6 @@ class Insights:
             hover_data=['type', 'gravity',  'class'],
         )
 
-        fig.update_layout(
-            autosize=False,
-            width=1000,
-            height=600
-        )
-
         return self.tmp_claims, fig, []
 
     def draw_incidents_clusters_map(self):
@@ -357,13 +351,8 @@ class Insights:
             animation_frame="hour",
             mapbox_style='open-street-map',
             hover_name="incident_time",
-            hover_data=['class','type', 'gravity'],
+            hover_data=['class', 'type', 'gravity'],
         )
-
-        fig.update_layout(
-            autosize=False,
-            width=1000,
-            height=600,)
                       
         return self.tmp_claims, fig, []
     

@@ -20,17 +20,27 @@ colors = {
 def layout():
     global insights
 
-    insights = Insights()
+    if insights is None:
+        insights = Insights()
 
     insights_to_display = [
         insights.biggest_accidents_per_type(),
         insights.accidents_per_vehicle_type(),
         insights.accidents_per_location(),
-        insights.draw_incidents_map(),
+    ]
+
+    clusters_to_display = [
         insights.draw_incidents_clusters_map()
     ]
 
     for _, fig, _ in insights_to_display:
+        fig.update_layout(
+            plot_bgcolor=colors['background'],
+            paper_bgcolor=colors['background'],
+            font_color='#ffffff'
+        )
+
+    for _, fig, _ in clusters_to_display:
         fig.update_layout(
             plot_bgcolor=colors['background'],
             paper_bgcolor=colors['background'],
@@ -46,6 +56,17 @@ def layout():
             html.P(" & ".join(insight))
         ], className='card w-full flex flex-col gap-4')
         for data, fig, insight in insights_to_display
+    ]
+
+    html_clusters = [
+        html.Div([
+            html.P('Press play to see the movement of the accidents clustered through the day'),
+            html.Div(
+                dcc.Graph(figure=fig, className='h-full w-full border-gray-300 border-2 rounded-md'),
+                className='w-full h-full'
+            ),
+        ], className='card w-full flex flex-col gap-4')
+        for _, fig, _ in clusters_to_display
     ]
 
     return html.Div([
@@ -80,7 +101,10 @@ def layout():
                 ]),
                 html.P('', id='insight_graph_2')
             ], className='card w-full flex flex-col gap-4'),
-        ], className='h-full grid grid-cols-1 lg:grid-cols-2 gap-4 h-full'),
+        ], className='h-full grid grid-cols-1 lg:grid-cols-2 gap-4'),
+        html.Div([
+            *html_clusters,
+        ], className='h-full grid grid-cols-1 gap-4')
     ], className='mx-auto container space-y-6 h-full')
 
 
