@@ -10,13 +10,17 @@ import pandas as pd
 import geopandas as gpd
 import haversine as hs
 
-from src_code import locator, postgresql, mapquest, google_maps
+from src_code.google_maps import GoogleMaps
+from src_code.locator import Locator
+from src_code.postgresql import PostgreSQL
+from src_code.mapquest import MapQuest
 
-# Instance the class
-l = locator.Locator()
-gm = google_maps.GoogleMaps()
-psql = postgresql.PostgreSQL()
-mq = mapquest.MapQuest()
+
+# Instance the classes
+locator = Locator()
+google_maps = GoogleMaps()
+psql = PostgreSQL()
+map_quest = MapQuest()
 
 
 def accident(address: str):
@@ -25,9 +29,10 @@ def accident(address: str):
     address -> Address where accident happened
     """
     # Validate location
-    accident_location = gm.place(address)
+    accident_location = google_maps.place(address)
+
     # Generate accident point
-    accident_point = gm.make_point(accident_location)
+    accident_point = google_maps.make_point(accident_location)
     return accident_point
 
 
@@ -44,8 +49,8 @@ def search_nearest_agent(accident_point, agents):
     nearest_agent = pd.DataFrame()
 
     while nearest_agent.empty:
-        buffer = l.make_buffer(accident_point, radius)
-        nearest_agent = l.potential_agents(agents, buffer)
+        buffer = locator.make_buffer(accident_point, radius)
+        nearest_agent = locator.potential_agents(agents, buffer)
         radius += 1000
 
     return nearest_agent
@@ -53,19 +58,23 @@ def search_nearest_agent(accident_point, agents):
 
 def find_best_agent(accident_point, agents):
     for idx, agent_idx, localidad, latitude, longitude, geometry in agents.itertuples():
-        directions = (mq.route(
+        directions = (map_quest.route(
             f'{geometry.y},{geometry.x}',
             f'{accident_point.geometry[0].y},{accident_point.geometry[0].x}'))
-        time_sec, time, distance = mq.get_route_info(directions)
+        time_sec, time, distance = map_quest.get_route_info(directions)
 
         agents.loc[idx, 'time'] = time
         agents.loc[idx, 'time_sec'] = time_sec
         agents.loc[idx, 'distance'] = distance
 
     # Exclude agents with zero time 
-    agents = agents.drop(agents[agents.time_sec < 1].index).reset_index(drop=True).sort_values(by=['time_sec']).reset_index(drop=True)
+    agents = agents\
+        .drop(agents[agents.time_sec < 1].index)\
+        .reset_index(drop=True)\
+        .sort_values(by=['time_sec'])\
+        .reset_index(drop=True)
 
-    # Get agent with minimun time
+    # Get agent with minimum time
     best_agent = agents.iloc[[agents['time_sec'].idxmin()]]
     return best_agent, agents
 
@@ -83,6 +92,7 @@ def far_accidents(accident_point1, accident_point2, agents):
     # Get the nearest agents to each accident point
     nearest_agents1 = search_nearest_agent(accident_point1, agents)
     nearest_agents2 = search_nearest_agent(accident_point2, agents)
+
     # Find the closest and fastest agent to the accident point
     best_agent1, nearest_agents1 = find_best_agent(accident_point1, nearest_agents1)
     best_agent2, nearest_agents2 = find_best_agent(accident_point2, nearest_agents2)
@@ -100,31 +110,39 @@ def closer_accidents(accident_point1, priority1, accident_point2, priority2, age
         
         # Validate if there are agents in both DFs
         if best_agent1.id.iloc[0] == best_agent2.id.iloc[0]:
+
             # If Agent is nearest to the accident 2:
             if best_agent1.time_sec.iloc[0] > best_agent2.time_sec.iloc[0]:
+
                 # If the nearest_agents1 DF has more agents take the second one
                 best_agent1 = nearest_agents1.iloc[[1]]
             else:
+
                 # If the nearest_agents2 DF has more agents take the second one
                 best_agent2 = nearest_agents2.iloc[[1]]
+
     # Highest priority for accident1
     elif priority1 == 3:
         # Get the best agent to the priority accident
         nearest_agents1 = search_nearest_agent(accident_point1, agents)
         best_agent1 = find_best_agent(accident_point1, nearest_agents1)
+
         # Get the best agent to the other accident excluding the previous agent
         nearest_agents2 = search_nearest_agent(
             accident_point2, agents[agents['id'] != best_agent1['id'][0]])
         best_agent2 = find_best_agent(accident_point2, nearest_agents2)
+
     # Highest priority for accident2
     elif priority2 == 3:
         # Get the best agent to the priority accident
         nearest_agents2 = search_nearest_agent(accident_point2, agents)
         best_agent2 = find_best_agent(accident_point2, nearest_agents2)
+
         # Get the best agent to the other accident excluding the previous agent
         nearest_agents1 = search_nearest_agent(
             accident_point1, agents[agents['id'] != best_agent2['id'][0]])
         best_agent1 = find_best_agent(accident_point1, nearest_agents1)
+
     # Any other scenario
     else:
         nearest_agents1 = search_nearest_agent(accident_point1, agents)
@@ -148,11 +166,13 @@ def main(address1, priority1, address2, priority2):
     # Only proceed in case the address was properly normalized to an accident point
     if not accident_point1.empty and not accident_point2.empty:
         distance = measure_distance(accident_point1, accident_point2)
+
         # Determine if the accidents are near to each other (<1.5km or <1500m)
         # Accidents are too far
         if distance > 1500:
             nearest_agents1, best_agent1, nearest_agents2, best_agent2 = far_accidents(
                 accident_point1, accident_point2, agents)
+
         # Accidents are closer
         else:
             nearest_agents1, best_agent1, nearest_agents2, best_agent2 = closer_accidents(
@@ -162,6 +182,7 @@ def main(address1, priority1, address2, priority2):
               f'The agent {best_agent1.id.iloc[0]} located at '
               f'({best_agent1.latitude.iloc[0]}, {best_agent1.longitude.iloc[0]}) '
               f'will take {best_agent1.time.iloc[0]} to get to the accident.\n')
+
         print(f'{accident_point2.address.iloc[0]}:\n'
               f'The agent {best_agent2.id.iloc[0]} located at '
               f'({best_agent2.latitude.iloc[0]}, {best_agent2.longitude.iloc[0]}) '

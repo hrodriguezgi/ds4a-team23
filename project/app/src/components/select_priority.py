@@ -2,6 +2,10 @@ from dash import dcc
 
 
 def create(id_property=None):
+    """
+    Main function to create the dropdown to manage the accident types for the priority
+    """
+
     return dcc.Dropdown(
         [
             {
@@ -21,5 +25,5 @@ def create(id_property=None):
         },
         placeholder='Type',
         clearable=False,
-        searchable=False,
+        searchable=False
     )

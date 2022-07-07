@@ -3,6 +3,7 @@ import dash_bootstrap_components as dbc
 from components import sidebar
 
 
+# Instantiate the Dash Application
 app = Dash(
     __name__,
     title='DS4A App',
@@ -14,12 +15,15 @@ app = Dash(
     }],
 )
 
+# Expose the server for production
 server = app.server
 
+# Create the main container for the different pages
 content = html.Div([
     page_container
 ], className='overflow-auto w-full h-full px-2 py-10 lg:p-10 flex flex-col gap-10', id='content')
 
+# Create the main layout of the app
 app.layout = html.Div([
     html.Div([
         sidebar.create(),

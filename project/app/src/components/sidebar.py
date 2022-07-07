@@ -9,13 +9,17 @@ f_sidebar.close()
 
 
 def create():
+    """
+    Main function to create the sidebar for both desktop and mobile
+    """
+
     return html.Div([
-        mobile_icon(),
-        main_sidebar()
+        _mobile_icon(),
+        _main_sidebar()
     ], className='relative')
 
 
-def main_sidebar():
+def _main_sidebar():
     return html.Div([
         html.Div([
             html.Img(
@@ -43,7 +47,7 @@ def main_sidebar():
     )
 
 
-def mobile_icon():
+def _mobile_icon():
     return html.Button([
         Svg(
             [
