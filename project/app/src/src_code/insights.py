@@ -3,7 +3,7 @@ import geopandas as gpd
 import plotly.express as px
 
 from math import radians
-from sklearn.cluster import DBSCAN 
+from sklearn.cluster import DBSCAN
 import statsmodels.formula.api as sm
 
 
@@ -54,8 +54,8 @@ class Insights:
             how="left",
             left_on="id",
             right_on="incident_id"
-        ).drop(columns=["id_y", "incident_id"])\
-            .rename(columns={"id_x": "id"})\
+        ).drop(columns=["id_y", "incident_id"]) \
+            .rename(columns={"id_x": "id"}) \
             .drop_duplicates(subset="id") \
             .sort_values("incident_time")
 
@@ -73,9 +73,9 @@ class Insights:
         """
         data = self.claims["type"].value_counts()
 
-        x, y = [self._apply_translation(x) for x in data.index],[val for val in data]
+        x, y = [self._apply_translation(x) for x in data.index], [val for val in data]
         data = pd.Series(y, index=x)
-        
+
         insight_results = [
             "The incident type with the most amount of cases is " + str(data.index[0]) + " with a total of " + str(
                 data[0])]
@@ -93,7 +93,6 @@ class Insights:
         pol_copy = self.pol
         data["localidad"] = [x.capitalize() for x in data["localidad"]]
         data_chlo = pol_copy.merge(data, how="left", on="localidad").set_index("localidad")
-        
 
         graphic = px.choropleth_mapbox(data_chlo,
                                        geojson=data_chlo.geometry,
@@ -173,7 +172,7 @@ class Insights:
         data["total_accidentes"] = data[0]
         del data[0]
 
-        data_final = pd.DataFrame(columns=["localidad"])        
+        data_final = pd.DataFrame(columns=["localidad"])
         data.sort_values(by=['total_accidentes'], ascending=False, inplace=True)
         data["type"] = [self._apply_translation(x) for x in data["type"]]
         for location in data["localidad"].value_counts().index:
@@ -181,11 +180,11 @@ class Insights:
         data_final["localidad"] = [x.capitalize() for x in data_final["localidad"]]
         pol_copy = self.pol
         pol_copy["localidad"] = [x.capitalize() for x in pol_copy["localidad"]]
-        
+
         data_chlo = pol_copy.merge(data_final, how="left", on="localidad").set_index("localidad")
 
-        data_final = data_final.rename(columns={"localidad":"Location","total_accidentes":"Total Accidents"})
-        data_chlo = data_chlo.rename(columns={"localidad":"Location","total_accidentes":"Total Accidents"})
+        data_final = data_final.rename(columns={"localidad": "Location", "total_accidentes": "Total Accidents"})
+        data_chlo = data_chlo.rename(columns={"localidad": "Location", "total_accidentes": "Total Accidents"})
 
         graphic = px.choropleth_mapbox(data_chlo,
                                        geojson=data_chlo.geometry,
@@ -220,12 +219,9 @@ class Insights:
         del data[0], data["hour"], data["index"]
 
         pol_copy = self.pol
-        data_chlo = pol_copy.merge(data, how="left", on="localidad").set_index("localidad")
-
-        pol_copy = self.pol
         data["localidad"] = [x.capitalize() for x in data["localidad"]]
         pol_copy["localidad"] = [x.capitalize() for x in pol_copy["localidad"]]
-        
+
         data_chlo = pol_copy.merge(data, how="left", on="localidad").set_index("localidad")
 
         graphic = px.choropleth_mapbox(data_chlo,
@@ -274,8 +270,6 @@ class Insights:
         hour_in_text = ("0" + str(hour) if hour < 10 else str(hour)) + ":00"
 
         data["type"] = [self._apply_translation(x) for x in data["type"]]
-        
-        
 
         insight_results = [
             "At " + hour_in_text + " hours, the most frequent accidents are " + str(data.iloc[0][0]) + " and " + str(
@@ -289,8 +283,11 @@ class Insights:
         return data, graphic, insight_results
 
     def sinisters_per_day(self):
-        data = self.claims["incident_day"].value_counts().sort_index(ascending=False).reset_index().rename(columns={"index": "Fecha", "incident_day":"Numero de siniestros"})        
+        data = self.claims["incident_day"].value_counts().sort_index(ascending=False).reset_index().rename(
+            columns={"index": "Fecha", "incident_day": "Numero de siniestros"})
+
         fig = px.line(data, x="Fecha", y="Numero de siniestros")
+
         return data, fig, []
 
     def cluster_points_dbscan(self, data):
@@ -308,14 +305,14 @@ class Insights:
 
         # fit dbscan clustering
         dbc = DBSCAN(
-            eps=eps/6371000,
+            eps=eps / 6371000,
             min_samples=min_samples,
             metric="haversine",
             n_jobs=-1
         ).fit(locs)
 
         data["cluster"] = dbc.labels_.astype(pd.Categorical)  # cluster labels
-        cluster_sizes = data["cluster"].value_counts() 
+        cluster_sizes = data["cluster"].value_counts()
         data["cluster_size"] = data["cluster"].map(cluster_sizes)
 
         return data
@@ -335,7 +332,7 @@ class Insights:
             animation_frame="hour",
             mapbox_style='open-street-map',
             hover_name="incident_time",
-            hover_data=['type', 'gravity',  'class'],
+            hover_data=['type', 'gravity', 'class'],
         )
 
         return self.tmp_claims, fig, []
@@ -356,20 +353,21 @@ class Insights:
             hover_name="incident_time",
             hover_data=['class', 'type', 'gravity'],
         )
-                      
+
         return self.tmp_claims, fig, []
-    
+
     def _train_model(self, nom_localidad):
         print(nom_localidad)
 
     def _create_linear_regression_model(self, localidad):
         subdf = self.claims[self.claims["location"] == localidad]
         subdf = subdf[subdf["month"] < 12]
-        data = subdf["month"].value_counts().sort_index(ascending=True).to_frame().reset_index().rename(columns={'index':'month','month':'accidents_amount'})
+        data = subdf["month"].value_counts().sort_index(ascending=True).to_frame().reset_index().rename(
+            columns={'index': 'month', 'month': 'accidents_amount'})
         print(data)
-        
+
         formula = 'accidents_amount ~ month'
-        linear_model = sm.ols(formula = formula, data = data)
+        linear_model = sm.ols(formula=formula, data=data)
         linear_model_fit = linear_model.fit()
         print(linear_model_fit.summary())
 
@@ -393,7 +391,6 @@ Cluster maps
 
 if __name__ == '__main__':
     insights = Insights("EN")
-    
+
     data, fig, insights = insights.draw_incidents_clusters_map()
     fig.show()
-
