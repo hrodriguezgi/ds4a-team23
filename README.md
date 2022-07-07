@@ -97,8 +97,26 @@ This app is deployed on website, however if you want to deploy it in your local 
 - Create an Api Key in [MapQuest](https://www.mapquest.com/)
 - Create an Api Key in [Google Maps](https://cloud.google.com/apis)
 - Create a `.env` file inside the path `project/app/src` based on the `.env.example` file.
+- In case you don't use the Docker alternative, you have to install Node >= 16.* and NPM [Download](https://nodejs.org/en/download/)
 
-### Option A (in case you don't have Docker)
+### Option A (Using Docker)
+
+The easiest way to launch the project is using docker (make sure to have Docker running on your machine).
+
+You just have to be on the docker-compose root folder and launch the instance,
+in other words, you can follow the steps below:
+
+```bash
+# We assume you are in the root folder of the repo
+cd .devcontainer/python_server
+
+docker-compose up -d --build
+```
+
+This way you can go to `http://localhost` and test the app.
+
+
+### Option B (in case you don't have Docker)
 
 This alternative will install all the resources locally.
 
@@ -122,23 +140,16 @@ python app.py
 
 This way you can go to `http://localhost:8050` and test the app.
 
-
-### Option B (Using Docker)
-
-This project can be launched using docker as an alternative to install everything locally 
-(make sure to have Docker running on your machine).
-
-You just have to be on the docker-compose root folder and launch the instance,
-in other words, you can follow the steps below:
+In order to have the right css files, do this additional steps in another terminal:
 
 ```bash
 # We assume you are in the root folder of the repo
-cd .devcontainer/python_server
+cd project/app
 
-docker-compose up -d --build
+npm run hot
 ```
 
-This way you can go to `http://localhost` and test the app.
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
