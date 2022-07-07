@@ -101,26 +101,6 @@ python app.py
 
 This way you can load dash locally and test the app.
 
-## Usage
-
-### Insights
-
-This section provides historical information about traffic incidents in Bogotá since January 2022. The most relevant plot is the last one. This graph shows the clusters of incident locations depending on the time of day chosen.
-
-![Clusters](images/clusters.png)
-
-### Find best agent
-
-The first step is to write the address where the accident occurred, then click on the `Search` button, the application will search for possible agents (close to this location) and define which will be the best agent to attend the emergency based on the time of minimum displacement.
-
-![BestAgent](images/best_agent.png)
-
-### Prioritize Claims
-
-This section will receive two accidents and depending on the category of the accident, it will prioritize the agents to attend to them. The categorization is Crash (1), Death (2) and Injured (3). Category 3 is the highest priority. Once the addresses of each accident are entered, the proximity between them will be evaluated, if they are more than 1.5 km away, it is determined that the accidents are independent. Otherwise, the possible agents of each accident must be evaluated and the attention of each one determined based on a prioritization algorithm.
-
-![Priority](images/priority.png)
-
 
 <!-- ROADMAP -->
 ## Roadmap
