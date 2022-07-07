@@ -317,12 +317,12 @@ class Insights:
 
         return data
 
-    def _compute_clusters(self):
-        self.tmp_claims = self.claims.groupby("hour").apply(self.cluster_points_dbscan)
+    def _load_clusters_db(self):
+        self.tmp_claims = pd.read_csv("assets/siniestros.csv.gz", parse_dates=["incident_time"])
 
     def draw_incidents_map(self):
         if self.tmp_claims is None:
-            self._compute_clusters()
+            self._load_clusters_db()
 
         fig = px.scatter_mapbox(
             self.tmp_claims.sort_values("hour"),
@@ -339,7 +339,7 @@ class Insights:
 
     def draw_incidents_clusters_map(self):
         if self.tmp_claims is None:
-            self._compute_clusters()
+            self._load_clusters_db()
 
         fig = px.scatter_mapbox(
             (self.tmp_claims.loc[self.tmp_claims["cluster"] != -1, :]).sort_values("hour"),
