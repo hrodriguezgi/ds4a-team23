@@ -1,12 +1,3 @@
-
-"""
-Accident main
-
-
-date        author              changelog
-2022-06-10  hrodriguezgi        creation
-"""
-
 import pandas as pd
 import locator
 

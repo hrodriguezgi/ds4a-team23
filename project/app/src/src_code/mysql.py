@@ -1,11 +1,3 @@
-"""
-MySQL class
-
-
-date        author              changelog
-2022-06-23  hrodriguezgi        creation
-"""
-
 from sqlalchemy import create_engine
 import pandas as pd
 

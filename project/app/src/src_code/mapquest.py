@@ -1,11 +1,3 @@
-"""
-mapquest api
-
-
-date        author              changelog
-2022-06-10  hrodriguezgi        creation
-"""
-
 import requests 
 import json
 

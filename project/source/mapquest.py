@@ -1,21 +1,13 @@
-
-"""
-mapquest api
-
-
-date        author              changelog
-2022-06-10  hrodriguezgi        creation
-"""
-
 import requests 
 import json
 
 import pandas as pd
+from decouple import config
 
 
-class MapQuest():
+class MapQuest:
     def __init__(self) -> None:
-        self.key = 'PHKj4K2YezeVChykh0blAAAZRapB6OpO'
+        self.key = config('MAPQUEST_KEY')
 
 
     def route(self, location1, location2):

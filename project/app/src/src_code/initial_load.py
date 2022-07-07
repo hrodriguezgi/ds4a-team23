@@ -1,11 +1,3 @@
-"""
-Initial load into mysql database
-
-
-date        author              changelog
-2022-06-23  hrodriguezgi        creation
-"""
-
 import os
 
 import pandas as pd
