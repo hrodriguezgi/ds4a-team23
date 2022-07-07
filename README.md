@@ -5,10 +5,13 @@
     <img src="images/logo.png" alt="Logo" width="200" height="200">
   </a>
 
-<h3 align="center">TracJam</h3>
+  <h1 align="center">TracJam</h1>
 
   <p align="center">
-   TracJam is a web application to coordinate the response and prioritize the agent's shifts to different traffic accidents in the city of Bogota in Colombia. 
+   TracJam is a web application to coordinate and prioritize the agent's response to different traffic accidents in the city of Bogota in Colombia.
+  </p>
+
+  Deployed Project: [https://www.tracjam.com.co/](https://www.tracjam.com.co/ )
 </div>
 
 
@@ -71,15 +74,16 @@ Based on the previous algorithm, in this case there are two different accidents 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
-### Built With
+### Tech Stack
 
 * [![Python][Python.com]][Python-url]
-* [![Heroku][Heroku.com]][Heroku-url]
-* [![PostgreSQL][PostgreSQL]][Postgresql-url]
+* [![Dash][Dash.com]][Dash-url]
 * [![Plotly][Plotly.com]][Plotly-url]
 * [![Pandas][Pandas.com]][Pandas-url]
 * [![Sklearn][sklearn.com]][sklearn-url]
 * [![Flask][Flask.com]][Flask-url]
+* [![PostgreSQL][PostgreSQL]][Postgresql-url]
+* [![Heroku][Heroku.com]][Heroku-url]
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -89,25 +93,61 @@ Based on the previous algorithm, in this case there are two different accidents 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This app is deployed on website, however if you want to deploy it in your local machine you need:
+This app is deployed on website, however if you want to deploy it in your local machine you need to:
 - Create an Api Key in [MapQuest](https://www.mapquest.com/)
 - Create an Api Key in [Google Maps](https://cloud.google.com/apis)
-- Install python [requirements](https://github.com/hrodriguezgi/ds4a-team23/blob/main/.devcontainer/requirements.txt)
+- Create a `.env` file inside the path `project/app/src` based on the `.env.example` file.
 
-Then you can navigate into `project/app/source` folder and launch the app like this:
-```python
+### Option A (in case you don't have Docker)
+
+This alternative will install all the resources locally.
+
+To begin with, please follow the next steps to install the `requirements`:
+
+```bash
+# We assume you are in the root folder of the repo
+cd project/app
+
+# It's recommended to do the following command inside a virtual environment
+pip install -r requirements.txt
+```
+
+Now, launch the application, but first make sure to navigate to `project/app/src`:
+
+```bash
+# We assume you followed the previous step
+cd src
 python app.py
 ```
 
-This way you can load dash locally and test the app.
+This way you can go to `http://localhost:8050` and test the app.
 
+
+### Option B (Using Docker)
+
+This project can be launched using docker as an alternative to install everything locally 
+(make sure to have Docker running on your machine).
+
+You just have to be on the docker-compose root folder and launch the instance,
+in other words, you can follow the steps below:
+
+```bash
+# We assume you are in the root folder of the repo
+cd .devcontainer/python_server
+
+docker-compose up -d --build
+```
+
+This way you can go to `http://localhost` and test the app.
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Roadmap
 
 - [ ] Enable automatic loads for datasets provided by the SDM, or enable the direct connect against the SDM databases.
 - [ ] Get real time position of the agents to improve the time attentions.
-- [ ] Enable speech to text to report an accident when a citizen calls to 123 emergency line.
 - [ ] Transform the app into API, this way any entity could use the insights and the algorithm to deploy emergency teams.
+- [ ] Enable speech to text to report an accident when a citizen calls to 123 emergency line.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -121,14 +161,13 @@ This way you can load dash locally and test the app.
 * Sebastian Chavarriaga - [@github](https://github.com/schavar) - [@linkedin](https://www.linkedin.com/in/sebastian-c-0a0071219/)
 * Victor Manuel Villamil Perez - [@github](https://github.com/vmvillamilp) - [@linkedin](https://www.linkedin.com/in/victorvillamil95/)
 
-Project Link: [https://www.tracjam.com.co/](https://www.tracjam.com.co/ )
-
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
+This project is in part done, thanks to the help of the following institutions:
 
 * [CorrelationOne](https://www.correlation-one.com/)
 * [MinTIC](https://www.mintic.gov.co/portal/inicio/)
@@ -155,6 +194,8 @@ Project Link: [https://www.tracjam.com.co/](https://www.tracjam.com.co/ )
 [product-screenshot]: images/screenshot.png
 [Plotly.com]: https://img.shields.io/badge/Plotly-%233F4F75.svg?style=for-the-badge&logo=plotly&logoColor=white
 [Plotly-url]: https://plotly.com/
+[Dash.com]: https://img.shields.io/badge/dash-%23150458.svg?style=for-the-badge&logo=plotly&logoColor=white
+[Dash-url]: https://dash.plotly.com/
 [Pandas.com]: https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white
 [Pandas-url]: https://pandas.pydata.org/
 [Python.com]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
