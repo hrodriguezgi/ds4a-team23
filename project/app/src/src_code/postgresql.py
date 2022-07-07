@@ -1,3 +1,4 @@
+from decouple import config
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 import pandas as pd
@@ -5,8 +6,7 @@ import pandas as pd
 
 class PostgreSQL:
     def __init__(self) -> None:
-        self.url = f"postgresql://FelixDavid12:v2_3s8Wd_jxbz2wSxRAcdKxkaCKkMztE" \
-                   f"@db.bit.io:5432/FelixDavid12/ds4a-team-23?sslmode=require"
+        self.url = config('DATABASE_URL')
 
         try:
             self.connection = create_engine(self.url)

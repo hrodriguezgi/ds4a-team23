@@ -1,4 +1,3 @@
-
 """
 Accident main
 
@@ -29,6 +28,7 @@ def accident(address: str):
     """
     # Validate location 
     accident_location = gm.place(address)
+
     # Generate accident point
     accident_point = gm.make_point(accident_location)
     return accident_point
@@ -67,7 +67,7 @@ def find_best_agent(accident_point, agents):
     # Exclude agents with zero time 
     agents = agents.drop(agents[agents.time_sec < 1].index).reset_index().sort_values(by=['time_sec'])
 
-    # Get agent with minimun time
+    # Get agent with minimum time
     agents = agents.iloc[[agents['time_sec'].idxmin()]]
     return agents
 

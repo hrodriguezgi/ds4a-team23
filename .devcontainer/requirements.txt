@@ -4,7 +4,6 @@ requests
 pandas-profiling[notebook]
 boto3
 geopy
-sklearn
 seaborn
 matplotlib==3.5.2
 pandas==1.4.3
@@ -22,3 +21,6 @@ psycopg2-binary==2.9.3
 dash-svg==0.0.8
 folium==0.12.1.post1
 haversine==2.5.1
+statsmodels==0.13.2
+scikit-learn==1.1.1
+python-decouple==3.6

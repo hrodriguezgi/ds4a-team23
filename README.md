@@ -102,7 +102,6 @@ python app.py
 This way you can load dash locally and test the app.
 
 
-<!-- ROADMAP -->
 ## Roadmap
 
 - [ ] Enable automatic loads for datasets provided by the SDM, or enable the direct connect against the SDM databases.
