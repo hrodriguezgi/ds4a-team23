@@ -1,52 +1,16 @@
 <div id="top"></div>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-<!-- [![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url] -->
-
-
 
 <!-- PROJECT LOGO -->
 <!-- <br /> -->
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="images/tracjam-logo.png" alt="Logo" width="200" height="200">
+  <a href="https://github.com/hrodriguezgi/ds4a-team23">
+    <img src="images/logo.png" alt="Logo" width="200" height="200">
   </a>
 
 <h3 align="center">Tracjam</h3>
 
   <p align="center">
    TracJam is a web application to coordinate the response and prioritize the agent's shifts to different traffic accidents in the city of Bogota in Colombia. 
-    <!-- <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
-  </p> -->
 </div>
 
 
@@ -82,19 +46,13 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
+[![Product Name Screen Shot](images/app.png)](https://tracja.com.co)
 
 ### Built With
 
 * [![Python][Python.com]][Python-url]
 * [![Heroku][Heroku.com]][Heroku-url]
-* [![Postgres][Postgres.com]][Postgres-url]
+* [![PostgreSQL][PostgreSQL]][Postgresql-url]
 * [![Plotly][Plotly.com]][Plotly-url]
 * [![Pandas][Pandas.com]][Pandas-url]
 * [![Sklearn][sklearn.com]][sklearn-url]
@@ -108,39 +66,38 @@ Here's a blank template to get started: To avoid retyping too much info. Do a se
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+This app is deployed on website, however if you want to deploy it in your local machine you need:
+- Create an Api Key in [MapQuest](https://www.mapquest.com/)
+- Create an Api Key in [Google Maps](https://cloud.google.com/apis)
+- Install python [requirements](https://github.com/hrodriguezgi/ds4a-team23/blob/main/.devcontainer/requirements.txt)
 
-### Prerequisites
+Then you can navigate into `project/app/source` folder and launch the app like this:
+```python
+python app.py
+```
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+This way you can load dash locally and test the app.
 
-### Installation
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-
-<p align="right">(<a href="#top">back to top</a>)</p>
-
-
-
-<!-- USAGE EXAMPLES -->
 ## Usage
+
+### Insights
+
+This section provides historical information about traffic incidents in Bogotá since January 2022. The most relevant plot is the last one. This graph shows the clusters of incident locations depending on the time of day chosen.
+
+![Clusters](images/clusters.png)
+
+### Find best agent
+
+The first step is to write the address where the accident occurred, then click on the `Search` button, the application will search for possible agents (close to this location) and define which will be the best agent to attend the emergency based on the time of minimum displacement.
+
+![BestAgent](images/best_agent.png)
+
+### Prioritize Claims
+
+This section will receive two accidents and depending on the category of the accident, it will prioritize the agents to attend to them. The categorization is Crash (1), Death (2) and Injured (3). Category 3 is the highest priority. Once the addresses of each accident are entered, the proximity between them will be evaluated, if they are more than 1.5 km away, it is determined that the accidents are independent. Otherwise, the possible agents of each accident must be evaluated and the attention of each one determined based on a prioritization algorithm.
+
+![Priority](images/priority.png)
+
 
 Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
@@ -233,9 +190,9 @@ Project Link: [https://github.com/hrodriguezgi/ds4a-team23](https://github.com/h
 [Heroku-url]: https://www.heroku.com/
 [sklearn.com]: https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white
 [sklearn-url]: https://scikit-learn.org/
-[Postgres.com]: https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white
-[Postgres-url]: https://www.postgresql.org/
-[Postgres.com]: https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white
-[Postgres-url]: https://www.postgresql.org/
+[PostgreSQL]: https://img.shields.io/badge/postgresql-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white
+[Postgresql-url]: https://www.postgresql.org/
+[Postgres.com]: https://img.shields.io/badge/postgresql-%2523316192.svg?style=for-the-badge&logo=postgresql&logoColor=white
+[Postgresql-url]: https://www.postgresql.org/
 [Flask.com]: https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white
 [Flask-url]: https://flask.palletsprojects.com/en/2.1.x/
