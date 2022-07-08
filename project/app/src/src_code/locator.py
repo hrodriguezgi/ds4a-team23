@@ -64,19 +64,10 @@ class Locator:
             agent_point = self.make_agent_point(rev_loc.address)
             agent_point['agent_idx'] = idx
 
+            if agent_point:
+                invalid = False
+
         return agent_point
-
-    def make_real_agents(self, agents_df):
-        all_agents = pd.DataFrame()
-
-        for id, localidad, latitude, longitude in agents_df.itertuples(index=False):
-            rev_loc = self.get_reverse_location(latitude, longitude)
-            agent_point = self.make_agent_point(rev_loc.address)
-            agent_point['agent_idx'] = id
-            agent_point['localidad'] = localidad
-            all_agents = pd.concat([all_agents, agent_point], ignore_index=True)
-
-        return all_agents
 
     def make_agents(self, quantity):
         agents = pd.DataFrame()

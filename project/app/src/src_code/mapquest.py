@@ -39,8 +39,7 @@ class MapQuest:
 
     def get_route_steps(self, directions):
         """
-        Gets the amount of steps in the directions
-        directions->list of directions (but usually brings 1)
+        Calculates the exact route that should be used by the agent (future work, it's not implemented yet)
         """
         directions = pd.DataFrame([directions])
         steps = pd.DataFrame(pd.DataFrame(directions['legs'].iloc[0]).iloc[0]['maneuvers'])
