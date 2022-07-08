@@ -142,7 +142,6 @@ class Insights:
         data = self.claims["location"].value_counts().reset_index().rename(
             columns={"index": "localidad", "location": "num_claims"}).drop(19)
         pol_copy = self.pol
-        data["localidad"] = [x.capitalize() for x in data["localidad"]]
         data_chlo = pol_copy.merge(data, how="left", on="localidad").set_index("localidad")
 
         graphic = px.choropleth_mapbox(data_chlo,
