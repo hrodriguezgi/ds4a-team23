@@ -187,6 +187,22 @@ This project is in part done, thanks to the help of the following institutions:
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
+## Extra Information
+The process of extraction, cleaning, and wrangling of the datasets was made through different notebooks that can be 
+found in the path `project/1_notebooks_eda`. And the process of determining the right use of different APIs to use
+on the final application can be found in the path `project/1_notebooks_api`.
+
+Use Jupyter to run the multiple notebooks in each folder or you can use follow the next steps to use Docker in Linux:
+
+```bash
+# We assume you are in the root folder of the repo
+cd .devcontainer
+
+docker-compose up -d --build
+```
+
+This way you can go to `http://localhost:8050` and you will see Jupyter Lab.
+
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
