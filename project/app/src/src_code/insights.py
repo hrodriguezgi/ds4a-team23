@@ -10,6 +10,14 @@ import statsmodels.formula.api as sm
 class Insights:
 
     def __init__(self, language='EN'):
+        """
+        Constructor of the class Insights.
+        It loads the info of the datasets and then makes it available to further analysis in the insights
+        public methods. For example, the data is loaded into claims, and then used in biggest_accidents_per_type.
+        language->Defines the language that will be used in the insights and maps.
+        """
+
+        # Initialize variables
         self.language = None
         self.incidents = None
         self.incidents_implicated = None
@@ -17,38 +25,72 @@ class Insights:
         self.tmp_claims = None
         self.translation_dictionary = dict()
 
+        # Loads and process the datasets
         self._load_datasets()
         self._init_datasets()
         self._process_datasets()
+
+        # Loads the figures needed to plot the choropleth maps
         self._load_polygons()
+
+        # Sets the language used in the insights and maps
         self.change_language(language)
 
     def change_language(self, language):
+        """
+        Defines the language that will be used in the insights and maps, and load the associated dictionary that
+        contains the translation data.
+        language->Defines the language that will be used in the insights and maps.
+        """
         self.language = language
         self._load_translation_dictionary()
 
     def _load_translation_dictionary(self):
+        """
+        If the language is EN, then proceeds to load the Spanish-English dictionary.
+        """
         if self.language == "EN":
+            # Loads the EN dictionary into the current translation dictionary
             self.translation_dictionary["EN"] = {}
+
+            # This is to extract the lines in the file en_data.txt; which contains the translation for every word
             with open('assets/en_data.txt') as f:
+
+                # Saves every word from the file into the dictionary, using a split by '='
                 for word in [line.rstrip().split("=") for line in f]:
                     self.translation_dictionary["EN"][word[0]] = word[1]
 
     def _apply_translation(self, word):
+        """
+        Searches for the word in the current translation dictionary, if it isn't spanish, then locates the word, else
+        returns the same word (because the datasets are in spanish by default).
+        """
         if self.language != "ES":
-            return self.translation_dictionary["EN"][word] if word in self.translation_dictionary["EN"] else "--"
+            # If the word is in the dictionary, translates it, else, returns the word as it arrived.
+            return self.translation_dictionary["EN"][word] if word in self.translation_dictionary["EN"] else word
         else:
             return word
 
     def _load_datasets(self):
+        """
+        Loads the data from the processed zips and saves it into de dataframes
+        """
         # Do not delete, useful for local tests
         self.incidents = pd.read_csv("assets/incidents.csv.gz", parse_dates=["incident_time"])
         self.incidents_implicated = pd.read_csv("assets/incidents_implicated.csv.gz")
 
+        # Parse the incident_time to datetime type
         self.incidents["incident_time"] = pd.to_datetime(self.incidents["incident_time"])
 
     def _init_datasets(self):
+        """
+        Joins the datasets into a dataframe called claims, which will be used in all the insights.
+        """
+        # Extracts only the incidents which are of class 'Siniestro' (which means claims in English)
         self.claims = self.incidents[self.incidents["class"] == "Siniestro"]
+
+        # Merges the incidents and incidents_implicated dataframe to create de claims dataset,
+        # then drops the columns id and id_x and sort the data by the time of the incident
         self.claims = self.claims.merge(
             self.incidents_implicated,
             how="left",
@@ -60,26 +102,35 @@ class Insights:
             .sort_values("incident_time")
 
     def _load_polygons(self):
+        # Loads the information about the polygons
         self.pol = gpd.read_file("assets/poligonos_bog.geojson")
 
     def _process_datasets(self):
+        # Create new fields to process the claims dataframe
         self.claims["incident_day"] = self.claims.loc[:, "incident_time"].dt.to_period("d").dt.to_timestamp()
         self.claims["hour"] = self.claims["incident_time"].dt.hour
         self.claims["month"] = self.claims["incident_time"].dt.month
 
     def biggest_accidents_per_type(self):
         """
-        1. The amount of accidents per type
+        First Insight: The amount of accidents per type
         """
+
+        # Extracts the total amount of claims per type
         data = self.claims["type"].value_counts()
 
+        # Splits a series to apply a translation to the type of incident
         x, y = [self._apply_translation(x) for x in data.index], [val for val in data]
+
+        # Creates a new series using the x and y components from the old series
         data = pd.Series(y, index=x)
 
+        # Generates the insight for this method, using the data generated before
         insight_results = [
             "The incident type with the most amount of cases is " + str(data.index[0]) + " with a total of " + str(
                 data[0])]
 
+        # Creates the bar plot for the front
         graphic = px.bar(data, x=data.index, y=data, title="Biggest incident types",
                          labels={'index': 'Incident type', 'y': 'Value'})
         return data, graphic, insight_results
@@ -105,6 +156,7 @@ class Insights:
                                        title="Accidents per locality"
                                        )
 
+        # Generates the insight for this method, using the data generated before
         insight_results = [
             "The location with more accidents is " + str(data.iloc[0][0]) + " with a total amount of " + str(
                 data.iloc[0][1]) + " cases, followed by " + str(data.iloc[1][0]) + " and " + str(
@@ -122,7 +174,11 @@ class Insights:
         del data["dead_count"]
         data.reset_index(inplace=True)
         data = data[(data["index"] > 0)]
+
+        # Generates the insight for this method, using the data generated before
         insight_results = [str(data["total"].sum()) + " people died because of the accidents"]
+
+        # Creates the bar plot for the front
         graphic = px.bar(data, x="index", y="total", color="tipo", title="Deaths per accident",
                          labels={'index': '# of deaths', 'total': 'Value', 'tipo': 'Category'})
         return data, graphic, insight_results
@@ -137,7 +193,11 @@ class Insights:
         del data["injured_count"]
         data.reset_index(inplace=True)
         data = data[(data["index"] > 0)]
+
+        # Generates the insight for this method, using the data generated before
         insight_results = [str(data["total"].sum()) + " people got injuries as result of the accidents"]
+
+        # Creates the bar plot for the front
         graphic = px.bar(data, x="index", y="total", color="tipo", title="Injuries per accident",
                          labels={'index': '# of injuries', 'total': 'Value', 'tipo': 'Category'})
 
@@ -151,12 +211,14 @@ class Insights:
         x, y = [self._apply_translation(x) for x in data.index], [val for val in data]
         data = pd.Series(y, index=x)
 
+        # Generates the insight for this method, using the data generated before
         insight_results = [
             "The type of vehicle with the most amount of accidents is " + str(data.index[0]) +
             ", followed by " + str(data.index[1]) + " and " + str(data.index[2]) +
             ", with a total amount of " + str(data.values[0]) + ", " + str(data.values[1]) +
             " and " + str(data.values[2]) + " cases respectively."]
 
+        # Creates the bar plot for the front
         graphic = px.bar(data, x=data.index, y=data, labels={'index': 'Type of vehicle', 'y': 'Amount'},
                          title="Accidents per vehicle type")
 
@@ -197,6 +259,7 @@ class Insights:
                                        zoom=10,
                                        title="Accidents per locality"
                                        )
+        # Generates the insight for this method, using the data generated before
         insight_results = [
             "The location with more accidents is " + str(data_final.iloc[0][0]) + " with a total amount of " + str(
                 data_final.iloc[0][2]) + " cases of type " + str(data_final.iloc[0][1]) + ", followed by " + str(
@@ -237,6 +300,7 @@ class Insights:
 
         hour_in_text = ("0" + str(hour) if hour < 10 else str(hour)) + ":00"
 
+        # Generates the insight for this method, using the data generated before
         insight_results = [
             f"The location with more accidents at {hour_in_text} is " + str(data.iloc[0][0])
             + " with a total amount of " + str(data.iloc[0][1]) + " cases",
@@ -249,9 +313,13 @@ class Insights:
         8. Accidents per priority type
         """
         data = self.claims["priority"].value_counts()
+
+        # Generates the insight for this method, using the data generated before
         insight_results = ["The most frequent priority for accidents is " + str(data.index[0]) + ", followed by " + str(
             data.index[1]) + ", with an amount of " + str(data.values[0]) + " and " + str(
             data.values[1]) + " cases each."]
+
+        # Creates the bar plot for the front
         graphic = px.bar(data, x=data.index, y=data, labels={'index': 'Priority', 'y': 'Amount'},
                          title="Accidents per priority")
 
@@ -271,11 +339,13 @@ class Insights:
 
         data["type"] = [self._apply_translation(x) for x in data["type"]]
 
+        # Generates the insight for this method, using the data generated before
         insight_results = [
             "At " + hour_in_text + " hours, the most frequent accidents are " + str(data.iloc[0][0]) + " and " + str(
                 data.iloc[1][0]) + ", with a total amount of " + str(data.iloc[0][1]) + " and " + str(
                 data.iloc[1][1]) + " cases."]
 
+        # Creates the bar plot for the front
         graphic = px.bar(data, x=data["type"], y=data["Amount"],
                          labels={'type': 'Accident type'},
                          title="Accident distribution at " + hour_in_text + " hours")
@@ -294,9 +364,9 @@ class Insights:
         """
         Code section used for implement the map's clusters
 
-        Recibe la disntancia 'eps' en metros bajo la cual se considera que un dato vecino de otro,
-        y 'min_samples' que es el minimo número de muestras que forman un cluster.
-        Retorna el dataframe 'data' con dos nuevas columnas 'cluster' y 'cluster_size'.
+        Receives the distance 'eps' in meters in which it is considered as a neighbour of another,
+        and the minimum number of samples which create a cluster. Returns the dataframe with two news
+        columns: 'cluster' and 'cluster_size'.
         """
         eps = 50
         min_samples = 3
