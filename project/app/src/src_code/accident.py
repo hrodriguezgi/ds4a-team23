@@ -1,13 +1,16 @@
 import pandas as pd
 import geopandas as gpd
 
-from src_code import locator, postgresql, mapquest, google_maps
+from src_code.locator import Locator
+from src_code.postgresql import PostgreSQL
+from src_code.mapquest import MapQuest
+from src_code.google_maps import GoogleMaps
 
 # Instance the class
-l = locator.Locator()
-gm = google_maps.GoogleMaps()
-psql = postgresql.PostgreSQL()
-mq = mapquest.MapQuest()
+locator = Locator()
+google_maps = GoogleMaps()
+psql = PostgreSQL()
+map_quest = MapQuest()
 
 
 def accident(address: str):
@@ -16,10 +19,10 @@ def accident(address: str):
     address -> Address where accident happened
     """
     # Validate location 
-    accident_location = gm.place(address)
+    accident_location = google_maps.place(address)
 
     # Generate accident point
-    accident_point = gm.make_point(accident_location)
+    accident_point = google_maps.make_point(accident_location)
     return accident_point
 
 
@@ -35,8 +38,8 @@ def search_nearest_agent(accident_point, agents):
     nearest_agent = pd.DataFrame()
 
     while nearest_agent.empty:
-        buffer = l.make_buffer(accident_point, radius)
-        nearest_agent = l.potential_agents(agents, buffer)
+        buffer = locator.make_buffer(accident_point, radius)
+        nearest_agent = locator.potential_agents(agents, buffer)
         radius += 1000
 
     return nearest_agent
@@ -44,10 +47,10 @@ def search_nearest_agent(accident_point, agents):
 
 def find_best_agent(accident_point, agents):
     for idx, agent_idx, localidad, latitude, longitude, geometry in agents.itertuples():
-        directions = (mq.route(
+        directions = (map_quest.route(
             f'{geometry.y},{geometry.x}',
             f'{accident_point.geometry[0].y},{accident_point.geometry[0].x}'))
-        time_sec, time, distance = mq.get_route_info(directions)
+        time_sec, time, distance = map_quest.get_route_info(directions)
 
         agents.loc[idx, 'time'] = time
         agents.loc[idx, 'time_sec'] = time_sec

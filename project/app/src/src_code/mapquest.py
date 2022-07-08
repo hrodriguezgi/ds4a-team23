@@ -26,6 +26,9 @@ class MapQuest:
         return time_sec, time, distance
 
     def get_route_steps(self, directions):
+        """
+        To calculate the exact route that should be used by the agent (future work, it's not implemented yet)
+        """
         directions = pd.DataFrame([directions])
         steps = pd.DataFrame(pd.DataFrame(directions['legs'].iloc[0]).iloc[0]['maneuvers'])
         steps = steps[['distance', 'streets', 'formattedTime', 'narrative']]
