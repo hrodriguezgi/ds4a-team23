@@ -7,9 +7,17 @@ from decouple import config
 
 class MapQuest:
     def __init__(self) -> None:
+        """
+        Loads the key to use the Mapquest API.
+        """
         self.key = config('MAPQUEST_KEY')
 
     def route(self, location1, location2):
+        """
+        Generates a route between location1 and location2
+        location1->Starting Address
+        location2->Ending Address
+        """
         url_directions = \
             f'http://www.mapquestapi.com/directions/v2/route?key={self.key}&from={location1}&to={location2}'
 
@@ -19,6 +27,10 @@ class MapQuest:
         return directions['route']
 
     def get_route_info(self, directions):
+        """
+        Gets information about the route to follow regarding the first direction
+        directions->list of directions (but usually brings 1)
+        """
         directions = pd.DataFrame([directions])
         time_sec = directions['time'][0]
         time = directions['formattedTime'][0]
@@ -27,7 +39,7 @@ class MapQuest:
 
     def get_route_steps(self, directions):
         """
-        To calculate the exact route that should be used by the agent (future work, it's not implemented yet)
+        Calculates the exact route that should be used by the agent (future work, it's not implemented yet)
         """
         directions = pd.DataFrame([directions])
         steps = pd.DataFrame(pd.DataFrame(directions['legs'].iloc[0]).iloc[0]['maneuvers'])
