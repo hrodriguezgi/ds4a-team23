@@ -130,10 +130,10 @@ def generate_map(accident_loc, best_agent_loc, nearest_agents_locations):
         icon=folium.Icon(color='darkblue', icon='star'),
     ).add_to(fig)
 
-    fig.save('map.html')
+    fig.save('assets/map.html')
 
     return html.Iframe(
-        srcDoc=open('map.html', 'r').read(),
+        srcDoc=open('assets/map.html', 'r').read(),
         width='100%',
         height='100%',
         className='h-[40rem] w-full border-gray-300 border-2 rounded-md'

@@ -200,10 +200,10 @@ def generate_map(
         icon=folium.Icon(color='darkblue', icon='star'),
     ).add_to(fig)
 
-    fig.save('map_prioritization.html')
+    fig.save('assets/map_prioritization.html')
 
     return html.Iframe(
-        srcDoc=open('map_prioritization.html', 'r').read(),
+        srcDoc=open('assets/map_prioritization.html', 'r').read(),
         width='100%',
         height='100%',
         className='h-[40rem] w-full border-gray-300 border-2 rounded-md'

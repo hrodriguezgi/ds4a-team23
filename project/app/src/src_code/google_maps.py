@@ -1,12 +1,3 @@
-"""
-google maps api
-
-
-date        author              changelog
-2022-06-30  hrodriguezgi        creation
-2022-07-03  hrodriguezgi        new df to return in make_point method
-"""
-
 import requests
 import json
 

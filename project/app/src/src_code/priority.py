@@ -1,11 +1,3 @@
-"""
-Priority main
-
-date        author              changelog
-2022-07-03  hrodriguezgi        creation
-2022-07-05  hrodriguezgi        removed agents with zero time
-"""
-
 import pandas as pd
 import geopandas as gpd
 import haversine as hs

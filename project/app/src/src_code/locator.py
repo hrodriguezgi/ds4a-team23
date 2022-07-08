@@ -1,11 +1,3 @@
-"""
-locator class
-
-
-date        author              changelog
-2022-06-10  hrodriguezgi        creation
-"""
-
 from geopy.geocoders import Nominatim
 import geopandas as gpd
 import pandas as pd

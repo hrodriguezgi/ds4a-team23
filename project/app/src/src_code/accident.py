@@ -1,14 +1,3 @@
-"""
-Accident main
-
-
-date        author              changelog
-2022-06-10  hrodriguezgi        creation
-2022-06-30  hrodriguezgi        use of Google Maps API
-2022-07-03  hrodriguezgi        Removed dummy agents
-2022-07-03  hrodriguezgi        Removed agents with zero time
-"""
-
 import pandas as pd
 import geopandas as gpd
 
