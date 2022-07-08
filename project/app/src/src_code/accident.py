@@ -27,16 +27,26 @@ def accident(address: str):
 
 
 def real_agents(quantity=50):
+    """
+    Extract n (quantity) amount of real agents
+    """
     query = f'select * from uvw_agents limit {quantity}'
+
     agents = psql.read_sql(query)
     agents = gpd.GeoDataFrame(agents, geometry=gpd.points_from_xy(agents.longitude, agents.latitude))
+
     return agents
 
 
 def search_nearest_agent(accident_point, agents):
+    """
+    Finds the nearest agents to the accident point
+    """
     radius = 1000
     nearest_agent = pd.DataFrame()
 
+    # It tries to find agents within a radius, if it doesn't it increases the radius until it finds
+    # Note: it will never be infinite, because there are always agents. However, it's recommended to add a break
     while nearest_agent.empty:
         buffer = locator.make_buffer(accident_point, radius)
         nearest_agent = locator.potential_agents(agents, buffer)
@@ -46,6 +56,9 @@ def search_nearest_agent(accident_point, agents):
 
 
 def find_best_agent(accident_point, agents):
+    """
+    Finds the best agents in terms of euclidean distance
+    """
     for idx, agent_idx, localidad, latitude, longitude, geometry in agents.itertuples():
         directions = (map_quest.route(
             f'{geometry.y},{geometry.x}',
