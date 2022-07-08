@@ -64,7 +64,7 @@ class Locator:
             agent_point = self.make_agent_point(rev_loc.address)
             agent_point['agent_idx'] = idx
 
-            if agent_point:
+            if not agent_point.address.isnull().any():
                 invalid = False
 
         return agent_point

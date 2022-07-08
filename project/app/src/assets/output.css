@@ -695,6 +695,10 @@ p,  li {
   display: flex;
 }
 
+.table {
+  display: table;
+}
+
 .grid {
   display: grid;
 }
