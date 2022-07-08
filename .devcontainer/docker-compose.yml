@@ -6,19 +6,5 @@ services:
         ports:
             - "8050:8050"
             - "8888:8888"
-        links:
-            - mysql
         volumes:
             - ../project:/home/jovyan/work
-
-    mysql:
-        platform: linux/amd64
-        image: mysql:8.0
-        container_name: ds4a-mysql
-        ports:
-            - "3306:3306"
-        volumes:
-            - ../data:/var/lib/mysql
-        environment:
-            MYSQL_ROOT_PASSWORD: 1234
-            MYSQL_DATABASE: ds4a
